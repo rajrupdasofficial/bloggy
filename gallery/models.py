@@ -1,0 +1,45 @@
+from django.db import models
+from PIL import Image
+import uuid
+import os
+# Create your models here.
+def file_upload_location(instance,filename):
+    file_description = instance.details.name.lower().replace(" ","-")
+    file_name = filename.lower().replace(" ","-")
+    return f"the file details are {file_description} and {file_name}"
+
+class FileDetail(models.Model):
+    name = models.CharField(max_length=255,default=None)
+    number_folder = models.CharField(max_length=255,default=None)
+    created = models.DateTimeField(auto_now_add=True)
+    upadate = models.DateTimeField(auto_now=True)
+
+
+class FileUpload(models.Model):
+    details = models.ForeignKey(FileDetail,default=None,on_delete=models.CASCADE)
+    file = models.FileField(upload_to=file_upload_location,null=True,blank=True)
+
+    def __str__(self) -> str:
+        return f"name of files uploaded are {self.file}"
+
+
+def photo_upload_location(instance,imagename):
+    url = instance.details.name.lower().replace(" ","-")
+    image_name = f'{uuid.uuid5(uuid.NAMESPACE_URL,url).hex}.jpg'
+    return os.path.join('gallery_images',image_name)
+
+class PhotoDetails(models.Model):
+    name = models.CharField(max_length=255,default=None)
+    created = models.DateTimeField(auto_now_add=True)
+    upadate = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f"photo names are {self.name}"
+
+
+class Photo(models.Model):
+    details = models.ForeignKey(PhotoDetails,default=None,on_delete=models.CASCADE)
+    photo = models.ImageField(upload_to=photo_upload_location,null=True,blank=True)
+
+    def __str__(self) -> str:
+        return f"photo details are {self.details}"
