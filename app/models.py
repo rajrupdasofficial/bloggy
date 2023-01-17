@@ -8,17 +8,18 @@ from io import StringIO, BytesIO
 from PIL import Image as Img
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from ckeditor_uploader.fields import RichTextUploadingField
-
+import os 
+import uuid
 
 def  random_string_generator(size=100, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
-    
+ #
 class Blog(models.Model):
     author = models.ForeignKey(User,on_delete=models.CASCADE)
     slug = models.SlugField(max_length=500,unique=True,blank=True)
     title =  models.CharField(max_length=200)
     category = models.CharField(max_length=255,default=None)
-    thumbnail=models.ImageField(upload_to="postimages",default='main.png')
+    thumbnail=models.ImageField(upload_to="postimages",default=None)
     content=RichTextUploadingField()
     featured=models.BooleanField(default=False)
     updated=models.DateTimeField(auto_now=True)
@@ -38,7 +39,7 @@ class Blog(models.Model):
             output=BytesIO()
             img.save(output,format='WebP',quality=70)
             output.seek(0)
-            self.thumbnail=InMemoryUploadedFile(output,'ImageField',"%s.webp" %self.thumbnail.name.split('.')[0],'thumbnail/webp',len(output.getbuffer()),None)
+            self.thumbnail=InMemoryUploadedFile(output,'ImageField',"%s.webp" %self.thumbnail.name.join(random_string_generator()).split('.')[0:10],'thumbnail/webp',len(output.getbuffer()),None)
         original_slug=slugify(self.title)
         queryset=Blog.objects.all().filter(slug__iexact=original_slug).count()
         count=1
