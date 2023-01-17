@@ -10,6 +10,11 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from ckeditor_uploader.fields import RichTextUploadingField
 import os 
 import uuid
+class Analytics(models.Model):
+    ip = models.CharField(max_length=255)
+
+    def __str__(self) -> str:
+        return f"{self.ip}"
 
 def  random_string_generator(size=100, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
