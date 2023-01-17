@@ -30,6 +30,7 @@ def photo_upload_location(instance,imagename):
 
 class PhotoDetails(models.Model):
     name = models.CharField(max_length=255,default=None)
+    description = models.TextField(default=None,blank=True)
     created = models.DateTimeField(auto_now_add=True)
     upadate = models.DateTimeField(auto_now=True)
 
@@ -40,6 +41,9 @@ class PhotoDetails(models.Model):
 class Photo(models.Model):
     details = models.ForeignKey(PhotoDetails,default=None,on_delete=models.CASCADE)
     photo = models.ImageField(upload_to=photo_upload_location,null=True,blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    upadate = models.DateTimeField(auto_now=True)
+
 
     def __str__(self) -> str:
         return f"photo details are {self.details}"
