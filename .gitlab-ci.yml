@@ -14,6 +14,7 @@ processing linting with flake8:
   stage: linting
   script:
     - pip install --upgrade pip
+    - pip install -r requirements.txt
     - pip install flake8
     - flake8
 processing coverage report:
@@ -21,6 +22,7 @@ processing coverage report:
   stage: coverage
   script:
     - pip install --upgrade pip
+    - pip install -r requirements.txt
     - pip install coverage
     - coverage run manage.py test
     - coverage report
