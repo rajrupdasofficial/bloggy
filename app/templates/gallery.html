@@ -10,7 +10,7 @@
 <meta name="author" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-<title>Neuron Template - Gallery</title>
+<title>Micro-Robotics - Experiment - Gallery</title>
 <!--
 
 Template 2085 Neuron
@@ -101,19 +101,19 @@ http://www.tooplate.com/view/2085-neuron
                          <p>Aliquam blandit velit nisi, sed fringilla felis lacinia sed. Integer vitae porta felis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus non tristique lacus.</p>
                     </div>
                </div>
-               <center>
-                    {% if page_obj.has_previous %}
-                        <a href="?page=1">&laquo First</a>
-                        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
-                    {% endif %}
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-                    {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">Next</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo</a>
-                {% endif %}
-               </center>
-
           </div>
+          <center>
+               {% if page_obj.has_previous %}
+                   <a href="?page=1">&laquo First</a>
+                   <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+               {% endif %}
+               Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+               {% if page_obj.has_next %}
+               <a href="?page={{ page_obj.next_page_number }}">Next</a>
+               <a href="?page={{ page_obj.paginator.num_pages }}">Last &raquo</a>
+           {% endif %}
+          </center>
+
      </div>
 </section>
 
