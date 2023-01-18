@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import IndexView,BlogDetailView,GalleryView,index
+from .views import index, blogdetail, galleryview
+
 urlpatterns = [
- path("",index,name="indexpage"),
- path("<slug:slug>/",BlogDetailView.as_view(),name="article-detail"),
- path("m",GalleryView.as_view(),name="gallery")
+    path("", index, name="indexpage"),
+    path("<slug:slug>", blogdetail, name="article-detail"),
+    path("artgallery", galleryview, name="gallery"),
 ]
