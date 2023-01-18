@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+        SECRET_KEY: "this key is a teting key"
     steps:
       - uses: actions/checkout@v2
       - name: setup python 3.10.9
