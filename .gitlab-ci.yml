@@ -30,12 +30,22 @@ processing coverage report:
     - coverage run manage.py test
     - coverage report
     - coverage html
+    - mkdir coveragereport
   artifacts:
     untracked: false
     when: on_success
     expire_in: "30 days"
     paths:
       - coveragereport
-  
+django teting from testfile:
+  image: python:3.10.9
+  stage: testing
+  variables:
+    SECRET_KEY: "this is a testing secret key"
+    admin: admin
+  script:
+    - pip install --upgrade pip
+    - pip install -r requirements.txt
+    - python manage.py test
 
 
