@@ -39,6 +39,7 @@ class PhotoDetails(models.Model):
 
     def __str__(self) -> str:
         return f"photo names are {self.name}"
+
     class Meta:
         verbose_name = 'Photo Detail'
         verbose_name_plural = 'Photo Details'
