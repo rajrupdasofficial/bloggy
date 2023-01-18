@@ -24,15 +24,18 @@ jobs:
           pip install -r requirements.txt
       - name: Lint8 with flake8
         run: |
+          pip install -r requirements.txt
           pip install flake8
           flake8
       - name: Coverage report
         run: |
+          pip install -r requirements.txt
           pip install coverage
           coverage run manage.py test
           coverage report
       - name: Django Test
         run: |
+          pip install -r requirements.txt
           python manage.py test
 
 
