@@ -8,6 +8,7 @@ from io import BytesIO
 from PIL import Image as Img
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from ckeditor_uploader.fields import RichTextUploadingField
+import os
 
 
 class Analytics(models.Model):
@@ -26,11 +27,14 @@ def random_string_generator(size=100, chars=string.ascii_lowercase + string.digi
 
 
 class Blog(models.Model):
+    def image_upload_to(self, instance=None):
+        if instance:
+            return os.path.join("Blog", self.title, instance)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=500, unique=True, blank=True)
     title = models.CharField(max_length=200)
     category = models.CharField(max_length=255, default=None)
-    thumbnail = models.ImageField(upload_to="postimages", default=None)
+    thumbnail = models.ImageField(upload_to=image_upload_to, default=None)
     content = RichTextUploadingField()
     featured = models.BooleanField(default=False)
     updated = models.DateTimeField(auto_now=True)
