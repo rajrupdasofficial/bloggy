@@ -83,6 +83,9 @@ class Comment(models.Model):
     def __str__(self) -> str:
         return f"comment author name {self.name}, comment author email {self.email}"
 
+    class Meta:
+        ordering = ['-created']
+
 
 class TestModel(models.Model):
     name = models.CharField(max_length=255)
