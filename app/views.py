@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Blog, Analytics
+from .models import Blog, Analytics, Comment
 from django.core.paginator import Paginator
 from gallery.models import Photo
+from django.contrib import messages
 
 
 def index(request):
@@ -38,6 +39,19 @@ def blogdetail(request, slug):
             "blog": blog,
         }
         return render(request, 'single-post.html', context)
+    elif request.method == "POST":
+        name = request.POST["name"]
+        email = request.POST["email"]
+        comment = request.POST["message"]
+        if len(name) < 5 and len(email) < 3 and len(comment) < 10:
+            messages.error(request, "Please enter atleast 5 character name, full valid email and atleast 10 character comment ")
+        else:
+            comment = Comment(name=name, email=email, comment=comment)
+            comment.save()
+            messages.success(request, "data saved successfully")
+        return render(request, "single-post.html")
+    else:
+        messages.error(request, "Something went wrong please try again")
 
 
 def galleryview(request):
