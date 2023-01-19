@@ -11,10 +11,14 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class Analytics(models.Model):
-    ip = models.CharField(max_length=255)
+    ip = models.CharField(max_length=255, null=True, blank=True, default=None)
 
     def __str__(self) -> str:
         return f"{self.ip}"
+
+    class Meta:
+        verbose_name = 'Analytic'
+        verbose_name_plural = 'Analytics'
 
 
 def random_string_generator(size=100, chars=string.ascii_lowercase + string.digits):
@@ -67,6 +71,20 @@ class Blog(models.Model):
 
     def get_absolute_url(self):
         return reverse('article-detail', kwargs={'slug': self.slug})
+
+
+class Comment(models.Model):
+    name = models.CharField(max_length=255, default=None, blank=True, null=True)
+    email = models.EmailField(max_length=255, default=None, blank=True, null=True)
+    comment = models.TextField(null=True, blank=True, default=None)
+    created = models.DateTimeField(auto_now_add=True)
+    update = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f"comment author name {self.name}, comment author email {self.email}"
+
+    class Meta:
+        ordering = ['-created']
 
 
 class TestModel(models.Model):

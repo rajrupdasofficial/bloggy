@@ -4,10 +4,12 @@ on:
     branches:
       - master
       - dev
+      - hotfix
   pull_request:
     branches:
       - master
       - dev
+      - hotfix
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,9 +17,9 @@ jobs:
         SECRET_KEY: "this key is a teting key"
         admin: admin
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: setup python 3.10.9
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           python-version: 3.10.9
       - name: Installl
@@ -30,10 +32,19 @@ jobs:
           flake8
       - name: Coverage report
         run: |
+          pip install --upgrade pip
           pip install -r requirements.txt
           pip install coverage
           coverage run manage.py test
           coverage report
+          coverage html
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage report artifact
+          path: htmlcov/**
+          if-no-files-found: error
+          retrention-days: 30
       - name: Django Test
         run: |
           pip install -r requirements.txt
