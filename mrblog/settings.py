@@ -151,7 +151,7 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-MESSAGE_TAGS={
-    messages.ERROR:'danger',
-    messages.SUCCESS:'success'
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+    messages.SUCCESS: 'success'
 }
