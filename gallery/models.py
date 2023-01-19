@@ -30,7 +30,6 @@ class FileUpload(models.Model):
 
 def photo_upload_location(instance, image_name):
     url = instance.details.name
-    print(url)
     image_name = f'{uuid.uuid5(uuid.NAMESPACE_URL,url).hex}.jpg'
     return os.path.join('gallery_images', image_name)
 
