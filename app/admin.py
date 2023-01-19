@@ -20,4 +20,5 @@ class AnalyticsAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'created',)
     list_display_links = ('email',)
+    search_fields = ('email',)
     list_per_page = 30
