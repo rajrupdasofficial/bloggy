@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Blog, Analytics, Comment
+from .models import Blog, Analytics, Comment, Contact
 # Register your models here.
 
 
@@ -21,4 +21,12 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'created',)
     list_display_links = ('email',)
     search_fields = ('email',)
+    list_per_page = 30
+
+
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'created',)
+    list_display_links = ('email',)
+    search_fields = ('name', 'email',)
     list_per_page = 30
