@@ -1,5 +1,4 @@
 from django.contrib import admin
-
 from .models import Blog, Analytics, Comment, Contact
 # Register your models here.
 
