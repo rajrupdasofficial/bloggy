@@ -8,6 +8,7 @@ from io import BytesIO
 from PIL import Image as Img
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from ckeditor_uploader.fields import RichTextUploadingField
+import os
 
 
 class Analytics(models.Model):
@@ -26,11 +27,14 @@ def random_string_generator(size=100, chars=string.ascii_lowercase + string.digi
 
 
 class Blog(models.Model):
+    def image_upload_to(self, instance=None):
+        if instance:
+            return os.path.join("Blog", self.title, instance)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=500, unique=True, blank=True)
     title = models.CharField(max_length=200)
     category = models.CharField(max_length=255, default=None)
-    thumbnail = models.ImageField(upload_to="postimages", default=None)
+    thumbnail = models.ImageField(upload_to=image_upload_to, default=None)
     content = RichTextUploadingField()
     featured = models.BooleanField(default=False)
     updated = models.DateTimeField(auto_now=True)
@@ -85,6 +89,24 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ['-created']
+
+
+
+class Contact(models.Model):
+    name = models.CharField(max_length=255, default=None, blank=True, null=True)
+    email = models.EmailField(max_length=255, default=None, blank=True, null=True)
+    subject = models.CharField(max_length=255, default=None, blank=True, null=True)
+    message = models.TextField(default=None, blank=True, null=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f"contact name {self.name}, contact name {self.email}"
+
+    class Meta:
+        ordering = ['-created']
+
+
 
 
 class TestModel(models.Model):
