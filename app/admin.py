@@ -25,12 +25,9 @@ class CommentAdmin(admin.ModelAdmin):
     list_per_page = 30
 
 
-
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
     list_display = ('name', 'email', 'created',)
     list_display_links = ('email',)
     search_fields = ('name', 'email',)
     list_per_page = 30
-
-
