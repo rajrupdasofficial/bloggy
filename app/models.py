@@ -91,6 +91,7 @@ class Comment(models.Model):
         ordering = ['-created']
 
 
+
 class Contact(models.Model):
     name = models.CharField(max_length=255, default=None, blank=True, null=True)
     email = models.EmailField(max_length=255, default=None, blank=True, null=True)
@@ -104,6 +105,8 @@ class Contact(models.Model):
 
     class Meta:
         ordering = ['-created']
+
+
 
 
 class TestModel(models.Model):
