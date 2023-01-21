@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Blog, Analytics, Comment, Contact
 from django.core.paginator import Paginator
-from gallery.models import Photo,VideoUpload
+from gallery.models import Photo, VideoUpload
 from django.contrib import messages
 
 
@@ -124,14 +124,14 @@ def watch_all(request):
             analytics = Analytics(ip=ip)
             analytics.save()
         context = {
-            "videos" : all_videos
+            "videos": all_videos
         }
-        return render(request,"allvideos.html",context)
-        
+        return render(request, "allvideos.html", context)
 
-def watchview(request,slug):
+
+def watchview(request, slug):
     if request.method == "GET":
-        video = get_object_or_404(VideoUpload,slug=slug)
+        video = get_object_or_404(VideoUpload, slug=slug)
         x_forw_for = request.META.get('HTTP_X_FORWARDED_F0R')
         if x_forw_for is not None:
             ip = x_forw_for.split(',')[0]
@@ -140,6 +140,6 @@ def watchview(request,slug):
             analytics = Analytics(ip=ip)
             analytics.save()
         context = {
-            "video":video
+            "video": video
         }
-    return render(request,'watch.html')
+    return render(request, 'watch.html')
