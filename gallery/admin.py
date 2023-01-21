@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import (FileUpload, FileDetail, Photo, PhotoDetails, )
+from .models import (FileUpload, FileDetail, Photo, PhotoDetails, VideoFileDetails, VideoUpload)
 
 
 class FileAdmin(admin.StackedInline):
@@ -27,4 +27,18 @@ class PhotoDetailAdmin(admin.ModelAdmin):
 
 @admin.register(Photo)
 class PhotoUploadAdmin(admin.ModelAdmin):
+    list_per_page = 30
+
+
+class VideoAdmin(admin.StackedInline):
+    model = VideoUpload
+
+
+@admin.register(VideoFileDetails)
+class VideoDetailsAdmin(admin.ModelAdmin):
+    inlines = [VideoAdmin]
+
+
+@admin.register(VideoUpload)
+class VideoUploadAdmin(admin.ModelAdmin):
     list_per_page = 30
