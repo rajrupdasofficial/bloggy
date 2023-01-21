@@ -1,6 +1,9 @@
 from django.db import models
 import uuid
 import os
+from django.template.defaultfilters import slugify
+import random
+import string
 # Create your models here.
 
 
@@ -56,3 +59,43 @@ class Photo(models.Model):
 
     def __str__(self) -> str:
         return f"photo details are {self.details}"
+
+
+def video_upload_location(instance, filename):
+    video_description = instance.details.name.lower().replace(" ", "-")
+    video_name = filename.lower().replace(" ", "-")
+    return os.path.join("new_video_files", video_description, video_name)
+
+
+def random_string_generator(size=20, chars=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
+class VideoFileDetails(models.Model):
+    name = models.CharField(max_length=255, default=None)
+    created = models.DateTimeField(auto_now_add=True)
+    upadate = models.DateTimeField(auto_now=True)
+
+    def __str__(self) -> str:
+        return f"file name {self.name}"
+
+
+class VideoUpload(models.Model):
+    details = models.ForeignKey(VideoFileDetails, default=None, on_delete=models.CASCADE)
+    slug = models.SlugField(max_length=1000, unique=True, blank=True)
+    file = models.FileField(upload_to=video_upload_location, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return f"name of files uploaded are {self.file}"
+
+    def save(self, *args, **kwargs):
+        original_slug = slugify(self.details.name).join(random_string_generator())
+        queryset = VideoUpload.objects.all().filter(slug__iexact=original_slug).count()
+        count = 1
+        slug = original_slug
+        while (queryset):
+            slug = original_slug + '-' + str(count) + "-".join(random_string_generator())
+            count += 1
+            queryset = VideoUpload.objects.all().filter(slug__iexact=slug).count()
+        self.slug = slug
+        super().save(*args, **kwargs)
