@@ -7,5 +7,5 @@ urlpatterns = [
     path("artgallery", galleryview, name="gallery"),
     path("contact", contactview, name="contact"),
     path("about", aboutview, name="about"),
-    path("watch",watchview,name="videos"),
+    path("watch", watchview, name="videos"),
 ]
