@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Blog, Analytics, Comment, Contact
 from django.core.paginator import Paginator
-from gallery.models import Photo
+from gallery.models import Photo,VideoUpload
 from django.contrib import messages
 
 
@@ -111,3 +111,35 @@ def aboutview(request):
         return render(request, "about.html")
     else:
         messages.error(request, "Something went wrong please try again")
+
+
+def watch_all(request):
+    if request.method == "GET":
+        all_videos = VideoUpload.objects.all().order_by('-created')
+        x_forw_for = request.META.get('HTTP_X_FORWARDED_F0R')
+        if x_forw_for is not None:
+            ip = x_forw_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+            analytics = Analytics(ip=ip)
+            analytics.save()
+        context = {
+            "videos" : all_videos
+        }
+        return render(request,"allvideos.html",context)
+        
+
+def watchview(request,slug):
+    if request.method == "GET":
+        video = get_object_or_404(VideoUpload,slug=slug)
+        x_forw_for = request.META.get('HTTP_X_FORWARDED_F0R')
+        if x_forw_for is not None:
+            ip = x_forw_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+            analytics = Analytics(ip=ip)
+            analytics.save()
+        context = {
+            "video":video
+        }
+    return render(request,'watch.html')
