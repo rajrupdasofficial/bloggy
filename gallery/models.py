@@ -84,6 +84,8 @@ class VideoUpload(models.Model):
     details = models.ForeignKey(VideoFileDetails, default=None, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=1000, unique=True, blank=True)
     file = models.FileField(upload_to=video_upload_location, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    upadate = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return f"name of files uploaded are {self.file}"
