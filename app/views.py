@@ -127,6 +127,8 @@ def watch_all(request):
             "videos": all_videos
         }
         return render(request, "allvideos.html", context)
+    else:
+        messages.error(request, "something went wrong try again")
 
 
 def watchview(request, slug):
