@@ -3,8 +3,14 @@ from .models import Blog, Analytics, Comment, Contact
 from django.core.paginator import Paginator
 from gallery.models import Photo, VideoUpload
 from django.contrib import messages
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.views.decorators.cache import cache_page
+
+CACHE_TTL = getattr(settings,'CACHE_TTL',DEFAULT_TIMEOUT)
 
 
+@cache_page(CACHE_TTL)
 def index(request):
     if request.method == "GET":
         all_blog = Blog.objects.all().order_by('-created')
@@ -26,7 +32,7 @@ def index(request):
     else:
         messages.error(request, "Something went wrong please try again")
 
-
+@cache_page(CACHE_TTL)
 def blogdetail(request, slug):
     if request.method == "GET":
         blog = get_object_or_404(Blog, slug=slug)
@@ -55,7 +61,7 @@ def blogdetail(request, slug):
     else:
         messages.error(request, "Something went wrong please try again")
 
-
+@cache_page(CACHE_TTL)
 def galleryview(request):
     if request.method == "GET":
         all_images = Photo.objects.all().order_by('-created')
@@ -77,7 +83,7 @@ def galleryview(request):
     else:
         messages.error(request, "Something went wrong please try again")
 
-
+@cache_page(CACHE_TTL)
 def contactview(request):
     if request.method == "GET":
         x_forw_for = request.META.get('HTTP_X_FORWARDED_F0R')
@@ -105,14 +111,14 @@ def contactview(request):
     else:
         messages.error(request, "Something went wrong please try again")
 
-
+@cache_page(CACHE_TTL)
 def aboutview(request):
     if request.method == "GET":
         return render(request, "about.html")
     else:
         messages.error(request, "Something went wrong please try again")
 
-
+@cache_page(CACHE_TTL)
 def watch_all(request):
     if request.method == "GET":
         all_videos = VideoUpload.objects.all().order_by('-created')
@@ -135,7 +141,7 @@ def watch_all(request):
     else:
         messages.error(request, "something went wrong try again")
 
-
+@cache_page(CACHE_TTL)
 def watchview(request, slug):
     if request.method == "GET":
         video = get_object_or_404(VideoUpload, slug=slug)
