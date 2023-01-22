@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Blog, Analytics, Comment, Contact
 from django.core.paginator import Paginator
-from gallery.models import Photo
+from gallery.models import Photo, VideoUpload
 from django.contrib import messages
 
 
@@ -111,3 +111,44 @@ def aboutview(request):
         return render(request, "about.html")
     else:
         messages.error(request, "Something went wrong please try again")
+
+
+def watch_all(request):
+    if request.method == "GET":
+        all_videos = VideoUpload.objects.all().order_by('-created')
+        paginated_gallery_number = 10
+        video_paginator = Paginator(all_videos, paginated_gallery_number)
+        x_forw_for = request.META.get('HTTP_X_FORWARDED_F0R')
+        if x_forw_for is not None:
+            ip = x_forw_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+            analytics = Analytics(ip=ip)
+            analytics.save()
+        page_number = request.GET.get('page')
+        page_obj = video_paginator.get_page(page_number)
+        context = {
+            "page_obj": page_obj,
+            "videos": all_videos
+        }
+        return render(request, "allvideos.html", context)
+    else:
+        messages.error(request, "something went wrong try again")
+
+
+def watchview(request, slug):
+    if request.method == "GET":
+        video = get_object_or_404(VideoUpload, slug=slug)
+        x_forw_for = request.META.get('HTTP_X_FORWARDED_F0R')
+        if x_forw_for is not None:
+            ip = x_forw_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+            analytics = Analytics(ip=ip)
+            analytics.save()
+        context = {
+            "videoupload": video
+        }
+        return render(request, 'tempwatch.html', context)
+    else:
+        messages.error(request, "something went wrong try again")
