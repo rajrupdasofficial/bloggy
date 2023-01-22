@@ -129,7 +129,7 @@ def watch_all(request):
         page_obj = video_paginator.get_page(page_number)
         context = {
             "page_obj": page_obj,
-            "video": all_videos
+            "videos": all_videos
         }
         return render(request, "allvideos.html", context)
     else:
@@ -147,6 +147,6 @@ def watchview(request, slug):
             analytics = Analytics(ip=ip)
             analytics.save()
         context = {
-            "video": video
+            "videoupload": video
         }
-    return render(request, 'watch.html', context)
+    return render(request, 'tempwatch.html', context)
