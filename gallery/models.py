@@ -87,6 +87,7 @@ def random_string_generator(size=30, chars=string.ascii_lowercase + string.digit
 
 class VideoFileDetails(models.Model):
     name = models.CharField(max_length=255, default=None)
+    description = models.TextField(blank=True, null=True, default=None)
     created = models.DateTimeField(auto_now_add=True)
     upadate = models.DateTimeField(auto_now=True)
 
