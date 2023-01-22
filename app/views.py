@@ -149,4 +149,6 @@ def watchview(request, slug):
         context = {
             "videoupload": video
         }
-    return render(request, 'tempwatch.html', context)
+        return render(request, 'tempwatch.html', context)
+    else:
+        messages.error(request, "something went wrong try again")
