@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Micro-Robotics.tech | Experiments | Video watching gallery</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Lora|Merriweather:300,400" rel="stylesheet">
+</head>
+<body>
+    <!-- PRE LOADER -->
+    <div class="preloader">
+        <div class="sk-spinner sk-spinner-wordpress">
+             <span class="sk-inner-circle"></span>
+        </div>
+   </div>
+   <!-- Navigation section  -->
+
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+
+         <div class="navbar-header">
+              <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                   <span class="icon icon-bar"></span>
+                   <span class="icon icon-bar"></span>
+                   <span class="icon icon-bar"></span>
+              </button>
+              <a href="{% url 'indexpage' %}" class="navbar-brand">Micro-Robotics.tech</a>
+         </div>
+         <div class="collapse navbar-collapse">
+              <ul class="nav navbar-nav navbar-right">
+                   <li class="active"><a href="{% url 'indexpage' %}">Home</a></li>
+                   <li><a href="{% url 'about' %}">About</a></li>
+                   <li><a href="{% url 'gallery' %}">Gallery</a></li>
+                   <li><a href="{% url 'contact' %}">Contact</a></li>
+                   <li><a href="{% url 'video' %}">Video</a></li>
+              </ul>
+         </div>
+ </div>
+</div>
+<!-- Home Section -->
+
+<section id="home" class="main-gallery parallax-section">
+     <div class="overlay"></div>
+     <div class="container">
+          <div class="row">
+
+               <div class="col-md-12 col-sm-12">
+                    <h1>Video Gallery</h1>
+               </div>
+          </div>
+     </div>
+</section>
+
+
+
+
+<!-- Back top -->
+<a href="#back-top" class="go-top"><i class="fa fa-angle-up"></i></a>
+
+<!-- SCRIPTS -->
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/particles.min.js' %}"></script>
+<script src="{% static 'js/app.js' %}"></script>
+<script src="{% static 'js/jquery.parallax.js' %}"></script>
+<script src="{% static 'js/smoothscroll.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
+</body>
+</html>
