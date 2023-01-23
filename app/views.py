@@ -7,7 +7,7 @@ from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.decorators.cache import cache_page
 
-CACHE_TTL = getattr(settings,'CACHE_TTL',DEFAULT_TIMEOUT)
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 @cache_page(CACHE_TTL)
@@ -31,6 +31,7 @@ def index(request):
         return render(request, 'index.html', context)
     else:
         messages.error(request, "Something went wrong please try again")
+
 
 @cache_page(CACHE_TTL)
 def blogdetail(request, slug):
@@ -61,6 +62,7 @@ def blogdetail(request, slug):
     else:
         messages.error(request, "Something went wrong please try again")
 
+
 @cache_page(CACHE_TTL)
 def galleryview(request):
     if request.method == "GET":
@@ -82,6 +84,7 @@ def galleryview(request):
         return render(request, 'gallery.html', context)
     else:
         messages.error(request, "Something went wrong please try again")
+
 
 @cache_page(CACHE_TTL)
 def contactview(request):
@@ -111,12 +114,14 @@ def contactview(request):
     else:
         messages.error(request, "Something went wrong please try again")
 
+
 @cache_page(CACHE_TTL)
 def aboutview(request):
     if request.method == "GET":
         return render(request, "about.html")
     else:
         messages.error(request, "Something went wrong please try again")
+
 
 @cache_page(CACHE_TTL)
 def watch_all(request):
@@ -140,6 +145,7 @@ def watch_all(request):
         return render(request, "allvideos.html", context)
     else:
         messages.error(request, "something went wrong try again")
+
 
 @cache_page(CACHE_TTL)
 def watchview(request, slug):
