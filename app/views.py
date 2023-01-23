@@ -123,7 +123,6 @@ def aboutview(request):
         messages.error(request, "Something went wrong please try again")
 
 
-
 @cache_page(CACHE_TTL)
 def watch_all(request):
     if request.method == "GET":
