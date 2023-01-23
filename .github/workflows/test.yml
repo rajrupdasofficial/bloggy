@@ -14,8 +14,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-        SECRET_KEY: "this key is a teting key"
-        admin: admin
+        SECRET_KEY: ${{ env.SECRET_KEY }}
+        admin: ${{ env.admin }}
+        DEBUG: ${{ env.DEBUG }}
     steps:
       - uses: actions/checkout@v3
       - name: setup python 3.10.9
