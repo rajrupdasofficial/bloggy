@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG")
 
 ALLOWED_HOSTS = []
 
@@ -91,8 +91,22 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-
+CACHE_TTL = 50 * 15
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": config("REDIS_LOCATION"),
+        "OPTIONS": {
+            "DB": 1,
+            "PASSWORD": config("REDIS_PASSWORD"),
+            'parser_class': config("PARSER_CLASS"),
+            'pool_class': config('POOL_CLASS'),
+            "CLIENT_CLASS": config('CLIENT_CLASS'),
+        }
+    }
+}
+SESSION_ENGINE = config("SESSION_ENGINE")
+SESSION_CACHE_ALIAS = config("SESSION_CACHE_ALIAS")
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
