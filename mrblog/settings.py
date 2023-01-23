@@ -97,7 +97,7 @@ CACHES = {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": config("REDIS_LOCATION"),
         "OPTIONS": {
-            "DB":1,
+            "DB": 1,
             "PASSWORD": config("REDIS_PASSWORD"),
             'parser_class': config("PARSER_CLASS"),
             'pool_class': config('POOL_CLASS'),
