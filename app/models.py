@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 import random
@@ -9,6 +8,7 @@ from PIL import Image as Img
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from ckeditor_uploader.fields import RichTextUploadingField
 import os
+from django.conf import settings
 
 
 class Analytics(models.Model):
@@ -30,7 +30,7 @@ class Blog(models.Model):
     def image_upload_to(self, instance=None):
         if instance:
             return os.path.join("Blog", self.title, instance)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=500, unique=True, blank=True)
     title = models.CharField(max_length=200)
     category = models.CharField(max_length=255, default=None)
