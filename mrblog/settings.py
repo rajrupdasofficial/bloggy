@@ -31,10 +31,12 @@ PRODUCTION = True if config('PRODUCTION') == "True" else False
 
 ALLOWED_HOSTS = ["*"]
 
+AUTH_USER_MODEL = 'account.User'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'account.apps.AccountConfig',
     'app.apps.AppConfig',
     'ckeditor',
     'ckeditor_uploader',
