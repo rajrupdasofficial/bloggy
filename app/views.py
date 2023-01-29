@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.decorators.cache import cache_page
+from django.db.models import Q
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -164,3 +165,36 @@ def watchview(request, slug):
         return render(request, 'tempwatch.html', context)
     else:
         messages.error(request, "something went wrong try again")
+
+
+def searchview(request):
+    if request.method == "GET":
+        x_forw_for = request.META.get('HTTP_X_FORWARDED_F0R')
+        if x_forw_for is not None:
+            ip = x_forw_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+            analytics = Analytics(ip=ip)
+            analytics.save()
+        return render(request, 'search.html')
+    elif request.method == "POST":
+        x_forw_for = request.META.get('HTTP_X_FORWARDED_F0R')
+        if x_forw_for is not None:
+            ip = x_forw_for.split(',')[0]
+        else:
+            ip = request.META.get('REMOTE_ADDR')
+            analytics = Analytics(ip=ip)
+            print(analytics)
+            analytics.save()
+        delta = request.POST["search"]
+        if len(delta) > 70 or len(delta) == 0:
+            messages.error(request, 'your query is not valid please try with different keyword')
+        else:
+            blog_resources = Blog.objects.filter(Q(title__icontains=delta) | Q(content__icontains=delta))
+        if blog_resources.count() == 0:
+            messages.warning(request, "OOPS there is no search results please refine your query")
+        context = {
+            'search': blog_resources,
+            'query': delta
+        }
+        return render(request, 'search-results.html', context)
