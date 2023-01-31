@@ -9,6 +9,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from ckeditor_uploader.fields import RichTextUploadingField
 import os
 from django.conf import settings
+import uuid
 
 
 class Analytics(models.Model):
@@ -41,7 +42,7 @@ class Blog(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Post name{self.title}"
+        return f"Post name::  {self.title}"
 
     def save(self, *args, **kwargs):
         if self.thumbnail:
@@ -54,7 +55,8 @@ class Blog(models.Model):
             output.seek(0)
             self.thumbnail = InMemoryUploadedFile(output, 'ImageField', "%s.webp" % self.thumbnail.name.join(
                 random_string_generator()).split('.')[0:10], 'thumbnail/webp', len(output.getbuffer()), None)
-        original_slug = slugify(self.title)
+        ud = str(uuid.uuid4())
+        original_slug = slugify(self.title+'-'+ud)
         queryset = Blog.objects.all().filter(slug__iexact=original_slug).count()
         count = 1
         slug = original_slug
