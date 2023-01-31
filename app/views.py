@@ -167,6 +167,7 @@ def watchview(request, slug):
         messages.error(request, "something went wrong try again")
 
 
+@cache_page(CACHE_TTL)
 def searchview(request):
     if request.method == "GET":
         x_forw_for = request.META.get('HTTP_X_FORWARDED_F0R')
