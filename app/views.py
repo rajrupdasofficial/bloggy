@@ -189,7 +189,8 @@ def searchview(request):
         if len(delta) > 70 or len(delta) == 0:
             messages.error(request, 'your query is not valid please try with different keyword')
         else:
-            blog_resources = Blog.objects.filter(Q(title__icontains=delta) | Q(content__icontains=delta) | Q(category__icontains=delta))
+            blog_resources = Blog.objects.filter(Q(title__icontains=delta) | Q(
+                content__icontains=delta) | Q(category__icontains=delta))
         if blog_resources.count() == 0:
             messages.warning(request, "OOPS there is no search results please refine your query")
         context = {
