@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, blogdetail, galleryview, contactview, aboutview, watchview, watch_all
+from .views import index, blogdetail, galleryview, contactview, aboutview, watchview, watch_all, searchview
 
 urlpatterns = [
     path("", index, name="indexpage"),
@@ -9,4 +9,6 @@ urlpatterns = [
     path("about", aboutview, name="about"),
     path("allvideos", watch_all, name="allvideos"),
     path("watch/<slug:slug>", watchview, name="videos"),
+    path("searching/", searchview, name="searching"),
+    path("search/", searchview, name="search")
 ]

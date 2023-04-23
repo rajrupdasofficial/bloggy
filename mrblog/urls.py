@@ -21,6 +21,8 @@ from decouple import config
 urlpatterns = [
     path("", include('app.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
+    path('custom/users/', include('customadmin.urls')),
+    path('customadmin/',include('django.contrib.auth.urls')),
     path(config('admin'), admin.site.urls),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
