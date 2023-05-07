@@ -38,6 +38,7 @@ AUTH_USER_MODEL = 'account.User'
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
     'app.apps.AppConfig',
+    'apiapp.apps.ApiappConfig',
     'ckeditor',
     'ckeditor_uploader',
     'customadmin.apps.CustomadminConfig',
