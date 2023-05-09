@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gallery.apps.GalleryConfig',
 ]
-if PRODUCTION:
+if PRODUCTION==True:
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
@@ -62,7 +62,9 @@ if PRODUCTION:
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     ]
-
+    CACHE_MIDDLEWARE_ALIAS = "default"
+    CACHE_MIDDLEWARE_SECONDS = 600
+    CACHE_MIDDLEWARE_KEY_PREFIX = "default"
 else:
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
@@ -73,9 +75,6 @@ else:
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     ]
-CACHE_MIDDLEWARE_ALIAS = "default"
-CACHE_MIDDLEWARE_SECONDS = 600
-CACHE_MIDDLEWARE_KEY_PREFIX = "default"
 
 ROOT_URLCONF = 'mrblog.urls'
 
@@ -120,23 +119,27 @@ else:
         }
     }
 
-
-CACHE_TTL = 50 * 15
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": config("REDIS_LOCATION"),
-        "OPTIONS": {
-            "DB": 1,
-            "PASSWORD": config("REDIS_PASSWORD"),
-            'parser_class': config("PARSER_CLASS"),
-            'pool_class': config('POOL_CLASS'),
-            "CLIENT_CLASS": config('CLIENT_CLASS'),
+if PRODUCTION== True:
+    CACHE_TTL = 50 * 15
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": config("REDIS_LOCATION"),
+            "OPTIONS": {
+                "DB": 1,
+                "PASSWORD": config("REDIS_PASSWORD"),
+                'parser_class': config("PARSER_CLASS"),
+                'pool_class': config('POOL_CLASS'),
+                "CLIENT_CLASS": config('CLIENT_CLASS'),
+            }
         }
     }
-}
-SESSION_ENGINE = config("SESSION_ENGINE")
-SESSION_CACHE_ALIAS = config("SESSION_CACHE_ALIAS")
+    SESSION_ENGINE = config("SESSION_ENGINE")
+    SESSION_CACHE_ALIAS = config("SESSION_CACHE_ALIAS")
+else:
+    CACHE_TTL = 0*0
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -161,7 +164,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Kolkata'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
