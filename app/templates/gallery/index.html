@@ -1,19 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
 <title>{% block title %} Wall-Gallery | Media | Index Page {% endblock %}</title>
+
 {% block content %}
-    <div class="" style="display: flex;flex-direction: row;">
+    <div class="wrapper">
         {% for i in all_videos %}
         <a href="{% url 'videos' i.slug %}">
-        <div class="card" style="width: 18rem;margin-left: 30px;">
-            <img src="{{ i.video_thumbnail.url }}" class="card-img-top img-fluid" alt="{{ i.details.name }}">
+          <div class="card">
+            <img class="card-img-top" src="{{ i.video_thumbnail.url }}" alt="{{ i.details.name }}">
             <div class="card-body">
               <h5 class="card-title">{{ i.details.name }}</h5>
               <p class="card-text">{{ i.details.description }}</p>
-              <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+              </div>
             </div>
             </a>
-          </div>
         {% endfor %}
-    </div>
+          </div>
+    
 {% endblock %}
