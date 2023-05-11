@@ -14,9 +14,11 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 @cache_page(CACHE_TTL)
 def index(request):
     if request.method == "GET":
-        all_blog = Blog.objects.all().order_by('-created')
-        paginated_number = 5
-        paginator = Paginator(all_blog, paginated_number)
+        all_videos= VideoUpload.objects.all().order_by('-created')
+        #all_blog = Blog.objects.all().order_by('-created')
+
+        #paginated_number = 5
+        #paginator = Paginator(all_blog, paginated_number)
         x_forw_for = request.META.get('HTTP_X_FORWARDED_F0R')
         if x_forw_for is not None:
             ip = x_forw_for.split(',')[0]
@@ -24,12 +26,14 @@ def index(request):
             ip = request.META.get('REMOTE_ADDR')
             analytics = Analytics(ip=ip)
             analytics.save()
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
+        #page_number = request.GET.get('page')
+        #page_obj = paginator.get_page(page_number)
         context = {
-            'page_obj': page_obj,
+         #   'page_obj': page_obj,
+         'all_videos':all_videos,
+
         }
-        return render(request, 'index.html', context)
+        return render(request, 'gallery/index.html', context)
     else:
         messages.error(request, "Something went wrong please try again")
 
@@ -82,7 +86,7 @@ def galleryview(request):
         context = {
             'page_obj': page_obj
         }
-        return render(request, 'gallery.html', context)
+        return render(request, 'gallery/gallery.html', context)
     else:
         messages.error(request, "Something went wrong please try again")
 
@@ -162,7 +166,7 @@ def watchview(request, slug):
         context = {
             "videoupload": video
         }
-        return render(request, 'tempwatch.html', context)
+        return render(request, 'gallery/tempwatch.html', context)
     else:
         messages.error(request, "something went wrong try again")
 
