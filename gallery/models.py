@@ -5,6 +5,7 @@ from django.template.defaultfilters import slugify
 import random
 import string
 from django.utils.crypto import get_random_string
+
 # Create your models here.
 
 
