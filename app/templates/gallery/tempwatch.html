@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+<title>{% block title %}  {% endblock title %}</title>
+{% block content %}
+    <center>
+    <video id="my-video" 
+    oncontextmenu="return false"
+    class="video-js"
+    controls
+    preload="auto"
+    width="960"
+    height="480"
+    data-setup="{}"
+     ><source src="{{videoupload.file.url}}" type="video/mp4"></video>
+    </center>
+{% endblock %}
