@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'gallery.apps.GalleryConfig',
     'rest_framework',
 ]
+
 if PRODUCTION==True:
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
@@ -54,6 +55,7 @@ if PRODUCTION==True:
     CACHE_MIDDLEWARE_ALIAS = "default"
     CACHE_MIDDLEWARE_SECONDS = 600
     CACHE_MIDDLEWARE_KEY_PREFIX = "default"
+
 else:
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
