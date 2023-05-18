@@ -7,7 +7,8 @@
         {% for i in all_videos %}
         <a href="{% url 'videos' i.slug %}">
           <div class="card">
-            <img class="card-img-top" src="{{ i.video_thumbnail.url }}" alt="{{ i.details.name }}">
+            <img class="card-img-top" src="{{ i.video_thum
+              bnail.url }}" alt="{{ i.details.name }}">
             <div class="card-body">
               <h5 class="card-title">{{ i.details.name }}</h5>
               <p class="card-text">{{ i.details.description }}</p>
