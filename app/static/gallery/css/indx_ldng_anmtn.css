@@ -1,0 +1,51 @@
+/* Index page visit loading animation screen */
+/* CSS for the loading screen */
+
+/* CSS for the loading screen */
+/* CSS for the loading screen */
+#loading-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+  
+  /* CSS for the progress bar animation */
+#loading-animation {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 8px solid #cccccc;
+    border-top-color: #3498db;
+    animation: spin 1s linear infinite;
+}
+  
+/* CSS for the loading text */
+#loading-text {
+    margin-top: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333333;
+    text-align: center;
+  }
+  
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  
