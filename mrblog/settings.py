@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'gallery.apps.GalleryConfig',
     'rest_framework',
 ]
-if PRODUCTION==True:
+if PRODUCTION:
     MIDDLEWARE = [
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
@@ -70,7 +70,7 @@ ROOT_URLCONF = 'mrblog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR,"templates")],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -108,7 +108,7 @@ else:
         }
     }
 
-if PRODUCTION== True:
+if PRODUCTION:
     CACHE_TTL = 50 * 15
     CACHES = {
         "default": {
@@ -126,7 +126,7 @@ if PRODUCTION== True:
     SESSION_ENGINE = config("SESSION_ENGINE")
     SESSION_CACHE_ALIAS = config("SESSION_CACHE_ALIAS")
 else:
-    CACHE_TTL = 0*0
+    CACHE_TTL = 0 * 0
 
 
 # Password validation
@@ -191,7 +191,7 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
     messages.SUCCESS: 'success',
     messages.WARNING: 'warning',
-    messages.INFO:'success',
+    messages.INFO: 'success',
 }
 
 
@@ -242,4 +242,4 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000"
 ]
 
-PASSWORD_RESET_TIME_OUT=900 #in seconds
+PASSWORD_RESET_TIME_OUT = 900  # in seconds
