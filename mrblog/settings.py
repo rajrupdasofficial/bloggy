@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'gallery.apps.GalleryConfig',
+    'fileapp.apps.FileappConfig',
     'rest_framework',
+    'videoapp.apps.VideoappConfig'
 ]
 if PRODUCTION:
     MIDDLEWARE = [
