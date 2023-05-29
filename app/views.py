@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Blog, Analytics, Comment, Contact
 from django.core.paginator import Paginator
-from gallery.models import Photo, VideoUpload
+from gallery.models import Photo
+from videoapp.models import  VideoUpload,VideoFileDetails
 from django.contrib import messages
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
