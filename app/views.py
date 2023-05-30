@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Blog,  Comment, Contact
+from .models import Blog
+from commentapp.models import Comment
+from contactapp.models import Contact
 from analyticsapp.models import  Analytics
 from django.core.paginator import Paginator
 from gallery.models import Photo
