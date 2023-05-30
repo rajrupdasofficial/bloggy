@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Blog, Comment, Contact
+from .models import Blog
+from commentapp.models import Comment
+from contactapp.models import Contact
 from analyticsapp.models import Analytics
 # Register your models here.
 
