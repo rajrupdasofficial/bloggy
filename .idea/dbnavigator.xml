@@ -13,7 +13,7 @@
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
     <connection id="914cf62f-7d0c-4bb2-8d34-ad093afe93d4">
-      <console name="Sql Lite explorer" type="STANDARD" schema="" session="Main" />
+      <console name="Sql Lite explorer" type="STANDARD" schema="" session="Session 1" />
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
@@ -22,7 +22,13 @@
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files />
   </component>
+  <component name="DBNavigator.Project.DatabaseSessionManager">
+    <connection id="914cf62f-7d0c-4bb2-8d34-ad093afe93d4">
+      <session name="Session 1" id="a64f69e9-c628-4cd6-a79b-8026452e3444" />
+    </connection>
+  </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
+    <filter-actions connection-id="914cf62f-7d0c-4bb2-8d34-ad093afe93d4" dataset="db.app_contact" active-filter-id="" />
     <filter-actions connection-id="914cf62f-7d0c-4bb2-8d34-ad093afe93d4" dataset="db.account_user" active-filter-id="EMPTY_FILTER" />
     <filter-actions connection-id="914cf62f-7d0c-4bb2-8d34-ad093afe93d4" dataset="db.app_analytics" active-filter-id="" />
   </component>
