@@ -25,11 +25,14 @@ AUTH_USER_MODEL = 'account.User'
 
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
+    'analyticsapp.apps.AnalyticsappConfig',
     'app.apps.AppConfig',
     'apiapp.apps.ApiappConfig',
     'ckeditor',
     'ckeditor_uploader',
     'customadmin.apps.CustomadminConfig',
+    'commentapp.apps.CommentappConfig',
+    'contactapp.apps.ContactappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,6 +42,7 @@ INSTALLED_APPS = [
     'gallery.apps.GalleryConfig',
     'fileapp.apps.FileappConfig',
     'rest_framework',
+    'searchapp.apps.SearchappConfig',
     'videoapp.apps.VideoappConfig'
 ]
 if PRODUCTION:
