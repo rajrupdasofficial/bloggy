@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Blog, Analytics, Comment, Contact
+from .models import Blog,  Comment, Contact
+from analyticsapp.models import  Analytics
 from django.core.paginator import Paginator
 from gallery.models import Photo
 from videoapp.models import  VideoUpload,VideoFileDetails
