@@ -50,7 +50,7 @@
   <body>
     <nav class="navbar sm-body-tertiary">
       <div class="container-fluid">
-        <a  href ="{% url 'indexpage' %}" class="navbar-brand" style="margin-left: 8%;">Wall-Gallery</a>
+        <a  href ="{% url 'app:indexpage' %}" class="navbar-brand" style="margin-left: 8%;">Wall-Gallery</a>
         <div class="" style="margin-right: 40%;">
         <form method="post" name="search_form" id="search_form" class="d-flex" role="search">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -91,26 +91,19 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
        <div class="modal-body">
-  <form method="POST" action="" enctype="multipart/form-data">
+  <form method="POST" action="{% url 'account:signup' %}" enctype="multipart/form-data">
+  {% csrf_token %}
     <div class="form-group">
       <label for="uname">Enter your username:</label>
-      <input type="text" name="uname" id="uname" placeholder="Enter your username here">
+      <input type="text" name="username" id="username" placeholder="Enter your username here">
     </div>
     <div class="form-group">
       <label for="email">Email:</label>
       <input type="email" name="email" id="email" placeholder="Enter your email address">
     </div>
     <div class="form-group">
-      <label for="firstname">First Name:</label>
-      <input type="text" name="firstname" id="firstname" placeholder="Enter your first name">
-    </div>
-    <div class="form-group">
-      <label for="lastname">Last Name:</label>
-      <input type="text" name="lastname" id="lastname" placeholder="Enter your last name">
-    </div>
-    <div class="form-group">
       <label for="password1">Password:</label>
-      <input type="password" name="password1" id="password1" placeholder="Enter your password">
+      <input type="password" name="password" id="password" placeholder="Enter your password">
     </div>
     <div class="form-group">
       <label for="password2">Confirm Password:</label>
@@ -119,7 +112,7 @@
     </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
+        <button type="submit" class="btn btn-primary">Signup</button>
       </div>
       </form>
     </div>
@@ -141,6 +134,38 @@
     });
     backdrop.show();
     }
+    </script>
+    
+    <script>
+    $(document).ready(function() {
+  // Handle form submission
+  $('#form1').submit(function(event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+
+    // Get the form data
+    var formData = new FormData($(this)[0]);
+
+    // Send the AJAX request
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'account:signup' %}",  // Replace with your Django signup URL
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(response) {
+        // Handle the successful response
+        console.log(response);
+        // Do something with the response, e.g., show a success message
+      },
+      error: function(xhr, status, error) {
+        // Handle the error
+        console.log(xhr.responseText);
+        // Do something with the error, e.g., display an error message
+      }
+    });
+    });
+    });
+
     </script>
   </body>
  </html>
