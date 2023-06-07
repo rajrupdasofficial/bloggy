@@ -20,7 +20,19 @@ from django.http import JsonResponse
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
-    return {'refresh':str(refresh), 'access': str(refresh.access_token)}
+    payload = refresh.payload
+
+    # Remove the 'user_id' field from the payload
+    payload.pop('user_id', None)
+
+    # Add 'uid' to the token payload as a string
+    payload['uid'] = str(user.uid)
+
+    # Reconstruct the refresh token with the updated payload
+    refresh.payload = payload
+
+    return {'refresh': str(refresh), 'access': str(refresh.access_token)}
+
 
 
 # Decorators for security measures
@@ -30,10 +42,9 @@ sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
 
 class Registration(APIView):
     renderer_classes = [UserRenderer]
-
+    
     @csrf_protect_m
     @never_cache_m
-    #@sensitive_post_parameters_m('password',)
     def post(self, request, format=None):
         reg_serializer = UserRSerializer(data=request.data)
         if reg_serializer.is_valid(raise_exception=True):
@@ -49,7 +60,17 @@ class Registration(APIView):
 
             return response
         else:
-            return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Check if username or email already exists in the errors
+            if 'username' in reg_serializer.errors and 'email' in reg_serializer.errors:
+                error_message = 'Username and email are already registered. Please login.'
+            elif 'username' in reg_serializer.errors:
+                error_message = 'Username is already registered. Please choose a different username.'
+            elif 'email' in reg_serializer.errors:
+                error_message = 'Email is already registered. Please use a different email.'
+            else:
+                error_message = 'Registration failed.'
+
+            return Response({'msg': error_message}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def is_password_strong(password):
