@@ -8,21 +8,7 @@ from django.utils.encoding import DjangoUnicodeDecodeError
 from .utils import Util
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
-
-
-#class UserRSerializer(serializers.HyperlinkedModelSerializer):
- #   password2 = serializers.CharField(style={'input_type':'password'},read_only=True)
-  #  class Meta:
-   #     model = User
-    #    fields = ['email','username','password','password2']
-    #    extra_kwargs = {
-     #   'password':{'write_only':True},
-     #   'password2': {'read_only': True},
-      #  }
-      #  def create(self, validated_data):
-       #     validated_data.pop('password2', None)  
-        #    return super(UserRSerializer, self).create(validated_data)
-
+from django.contrib.auth import authenticate, login
 
 class UserRSerializer(serializers.HyperlinkedModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
