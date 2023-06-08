@@ -115,6 +115,7 @@
         <button type="submit" class="btn btn-primary">Signup</button>
       </div>
       </form>
+      <p style="text-align: center;font-size: 1rem;">Already have an account? <span name="loginmodal" id="loginmodal"  style="font-size: larger;font-weight: bold;color: blue; cursor: pointer;"  onclick="openLModal()" >Login</span></p>
     </div>
   </div>
 </div>
@@ -130,28 +131,35 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-          
+  <form method="POST" action="{% url 'account:login' %}" enctype="multipart/form-data" name="from2" id="form2">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" placeholder="Enter your email address">
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="password" placeholder="Enter your password">
+    </div>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="submit" class="btn btn-primary">Login</button>
       </div>
     </div>
   </div>
 </div>
 
 <!--  end login modal -->
-    
-    
-    
-    
+
   <!-- active script section -->
-<!--    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>-->
     <script src="{% static 'basestatic/js/jquery_min.js' %}"></script>
     <script src="{% static 'basestatic/js/bootstrap_bundel_min.js'%}"></script>
     <script src="{% static 'basestatic/js/sweetalert_min.js' %}">
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     <script src="{% static 'gallery/js/indx_ldng_anmtn.js' %}"></script>
+    <script src="{% static 'basestatic/js/modal_controller.js' %}"></script>
     <script>
      function openModal() {
     var modal = document.getElementById('staticBackdrop');
@@ -221,5 +229,66 @@
   });
 </script>
 <!--login script-->
+<script>
+$(document).ready(function() {
+  // Handle form submission
+  $('#form2').submit(function(event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+
+    // Get the form data
+    var formData = new FormData($(this)[0]);
+
+    // Send the AJAX request
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'account:login' %}",  // Replace with your Django login URL
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(response) {
+        console.log(response);
+        // Show SweetAlert success message
+        swal({
+          title: "Success",
+          text: "Login successful!",
+          icon: "success",
+          buttons: {
+            confirm: {
+              text: "OK",
+              value: true,
+              visible: true,
+              className: "swal-button",
+            },
+          },
+        }).then(function() {
+          $('#form2')[0].reset();
+          $('#staticBackdrop').modal('hide');
+          $('#exampleModal').modal('hide');
+          window.location.href = "{% url 'app:indexpage' %}";   
+
+        });
+      },
+      error: function(xhr, status, error) {
+        // Handle the error
+        swal({
+          title: "Login Failed",
+          text: "Email or password is incorrect.",
+          icon: "error",
+          buttons: {
+            confirm: {
+              text: "OK",
+              value: true,
+              visible: true,
+              className: "swal-button",
+            },
+          },
+        });
+      }
+    });
+  });
+});
+
+</script>
+<!--end of login-->
   </body>
  </html>
