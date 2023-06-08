@@ -212,11 +212,11 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': False,
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION':False,
     'UPDATE_LAST_LOGIN': False,
 
-    'ALGORITHM': 'HS256',
+    'ALGORITHM': 'HS512',
     'SIGNING_KEY': SECRET_KEY,
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
@@ -249,3 +249,11 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 PASSWORD_RESET_TIME_OUT = 900  # in seconds
+#email config
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USER = config('EMAIL')
+EMAIL_PASSWORD = config('PASSWORD')
+EMAIL_FROM = config('EMAIL')
