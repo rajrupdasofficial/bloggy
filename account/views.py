@@ -15,7 +15,7 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from rest_framework.response import Response
 from django.http import JsonResponse
-
+from django.contrib.auth import authenticate, login
 
 
 def get_tokens_for_user(user):
@@ -39,7 +39,7 @@ def get_tokens_for_user(user):
 csrf_protect_m = method_decorator(csrf_protect)
 never_cache_m = method_decorator(never_cache)
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
-
+#user registration 
 class Registration(APIView):
     renderer_classes = [UserRenderer]
     
@@ -79,3 +79,33 @@ def is_password_strong(password):
     # You can include requirements such as minimum length, character complexity, etc.
     # Example implementation:
     return len(password) >= 8
+
+#user login section
+# user login section
+class Login(APIView):
+    renderer_classes = [UserRenderer]
+    
+    @csrf_protect_m
+    @never_cache_m
+    def post(self, request, format=None):
+        serializer = UserLSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            email = serializer.data.get('email')
+            password = serializer.data.get('password')
+            print('password',password)
+            user = authenticate(email=email, password=password)
+            if user is not None:
+                login(request, user)  # Logs the user in and creates a session
+                # Generate the token
+                token = get_tokens_for_user(user)
+                # Set the token as an HTTP-only session cookie
+                response = Response({'token': token, 'msg': 'Success Login'})
+                response.set_cookie('refresh_token', token['refresh'], httponly=True, samesite='Strict')
+                return response
+            else:
+                print('User authentication failed:', email,password)
+                
+                return Response({'errors': {'non_field_errors': ['Email or password is not valid.']}}, status=400)
+        else:
+            print('Serializer validation failed:', serializer.errors)
+            return Response({'errors': serializer.errors}, status=400)
