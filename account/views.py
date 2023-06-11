@@ -15,8 +15,31 @@ from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from rest_framework.response import Response
 from django.http import JsonResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
+from rest_framework import status
+from django.middleware.csrf import get_token
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.sessions.models import Session
+from django.contrib.sessions.backends.db import SessionStore
+from django.middleware.csrf import rotate_token
+from rest_framework.authtoken.models import Token
 
+def set_refresh_token_to_session(session_key: str, refresh_token: str):
+    try:
+        session = Session.objects.get(session_key=session_key)
+        session_data = session.get_decoded()
+        session_data['refresh_token'] = refresh_token
+        session.session_data = SessionStore().encode(session_data)
+        session.save()
+    except Session.DoesNotExist:
+         # Create a new session
+        session = SessionStore()
+        session.create()
+        session_data = {'refresh_token': refresh_token}
+        session_data_encoded = session.encode(session_data)
+        session.session_data = session_data_encoded
+        session.save()
+        
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -31,9 +54,13 @@ def get_tokens_for_user(user):
     # Reconstruct the refresh token with the updated payload
     refresh.payload = payload
 
+    # Get the session key for the user
+    session_key = user.get_session_auth_hash()
+
+    # Set the refresh token into session storage
+    set_refresh_token_to_session(session_key, str(refresh))
+
     return {'refresh': str(refresh), 'access': str(refresh.access_token)}
-
-
 
 # Decorators for security measures
 csrf_protect_m = method_decorator(csrf_protect)
@@ -80,7 +107,7 @@ def is_password_strong(password):
     # Example implementation:
     return len(password) >= 8
 
-#user login section
+
 # user login section
 class Login(APIView):
     renderer_classes = [UserRenderer]
@@ -92,7 +119,6 @@ class Login(APIView):
         if serializer.is_valid(raise_exception=True):
             email = serializer.data.get('email')
             password = serializer.data.get('password')
-            print('password',password)
             user = authenticate(email=email, password=password)
             if user is not None:
                 login(request, user)  # Logs the user in and creates a session
@@ -109,3 +135,14 @@ class Login(APIView):
         else:
             print('Serializer validation failed:', serializer.errors)
             return Response({'errors': serializer.errors}, status=400)
+
+#logout method
+class Logout(APIView):
+    @csrf_protect_m
+    @never_cache_m
+    def post(self, request, format=None):
+        logout(request)
+        response = Response({'message': 'Logged out successfully.'})
+        rotate_token(request) 
+        response.delete_cookie('refresh_token')
+        return response
