@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gallery.apps.GalleryConfig',
     'fileapp.apps.FileappConfig',
+    'profileapp.apps.ProfileappConfig',
     'rest_framework',
     'searchapp.apps.SearchappConfig',
     'videoapp.apps.VideoappConfig'
