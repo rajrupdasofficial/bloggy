@@ -35,4 +35,29 @@ function openLModal() {
   });
   backdrop.show();
 }
+//open logout modal
+function openLogoutModal() {
+  var loginModal = document.getElementById('exampleModal');
+  var signupModal = document.getElementById('staticBackdrop');
+  var logoutModal = document.getElementById('logoutModal');
+
+  // Hide the login modal
+  var loginBackdrop = bootstrap.Modal.getInstance(loginModal);
+  if (loginBackdrop) {
+    loginBackdrop.hide();
+  }
+
+  // Hide the signup modal
+  var signupBackdrop = bootstrap.Modal.getInstance(signupModal);
+  if (signupBackdrop) {
+    signupBackdrop.hide();
+  }
+
+  // Show the logout modal
+  var backdrop = new bootstrap.Modal(logoutModal, {
+    backdrop: 'static',
+    keyboard: false
+  });
+  backdrop.show();
+}
 
