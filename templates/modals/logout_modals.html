@@ -1,0 +1,22 @@
+<!-- Logout Modal -->
+{% load static %}
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Checkout Profile</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p> Go to your profile &nbsp; <span> <img src="{% static 'basestatic/icons/profile.png' %}" alt="profile cons" style="height: 40px;cursor: pointer;"> </span> </p>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary me-3" data-bs-dismiss="modal"><img src="{% static 'basestatic/icons/close.png' %}" alt="Close Icon" style="height: 22px;"></button>
+        <form method="POST" action="{% url 'account:logout'  %}"   enctype="multipart/form-data">
+        {% csrf_token %}
+        <button type="button" class="btn btn-primary" data-dismiss="modal" id="logoutModal" ><img src="{% static 'basestatic/icons/logout.png' %}" alt="Logout Icon" style="height: 22px;"></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
