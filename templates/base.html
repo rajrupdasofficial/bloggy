@@ -64,8 +64,15 @@
       <a href="#"><img src="{% static 'basestatic/icons/blaze.png' %}" alt="blaze" style="color: white;background: white;height: 22px;border-radius: 10px;" ></a>
       <a href="#"><img src="{% static 'basestatic/icons/plus.png' %}" alt="blaze" style="color: white;background: white;height: 22px;border-radius: 10px;" ></a>
       <a href="#"><img src="{% static 'basestatic/icons/bell.png' %}" alt="blaze" style="color: white;background: white;height: 22px;border-radius: 10px;" ></a>
+      <!--open logout modal when user logged in-->
+      {% if user.is_authenticated %}
+       <a href="#" onclick="openLogoutModal()"><img src="{% static 'basestatic/icons/user.png' %}" alt="blaze" style="color: white;background: white;height: 22px;border-radius: 10px;" ></a> <!-- Logout button -->
+      <!-- open signup modal when user logged out-->
+      {% else %}
       <a href="#" onclick="openModal()"><img src="{% static 'basestatic/icons/user.png' %}" alt="blaze" style="color: white;background: white;height: 22px;border-radius: 10px;" ></a> <!-- it's a signup
       and profile view button-->
+      <!--end of signup modal-->
+      {% endif  %}
     </div>
     </div>
     <div id="loading-container">
@@ -82,79 +89,29 @@
   Launch static backdrop modal
 </button>-->
 
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Signup</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-       <div class="modal-body">
-  <form method="POST" action="{% url 'account:signup' %}" enctype="multipart/form-data" name="from1" id="form1">
-  {% csrf_token %}
-    <div class="form-group">
-      <label for="uname">Enter your username:</label>
-      <input type="text" name="username" id="username" placeholder="Enter your username here">
-    </div>
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" name="email" id="email" placeholder="Enter your email address">
-    </div>
-    <div class="form-group">
-      <label for="password1">Password:</label>
-      <input type="password" name="password" id="password" placeholder="Enter your password">
-    </div>
-    <div class="form-group">
-      <label for="password2">Confirm Password:</label>
-      <input type="password" name="password2" id="password2" placeholder="Confirm your password">
-    </div>
-    </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Signup</button>
-      </div>
-      </form>
-      <p style="text-align: center;font-size: 1rem;">Already have an account? <span name="loginmodal" id="loginmodal"  style="font-size: larger;font-weight: bold;color: blue; cursor: pointer;"  onclick="openLModal()" >Login</span></p>
-    </div>
-  </div>
-</div>
+<!-- signup Modal -->
+
+{% include 'modals/signup_modal.html' %}
+
 <!-- end of signup modal -->
 
 
 <!-- start login modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Login</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-  <form method="POST" action="{% url 'account:login' %}" enctype="multipart/form-data" name="from2" id="form2">
-    {% csrf_token %}
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" name="email" id="email" placeholder="Enter your email address">
-    </div>
-    <div class="form-group">
-      <label for="password">Password:</label>
-      <input type="password" name="password" id="password" placeholder="Enter your password">
-    </div>
 
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Login</button>
-      </div>
-    </div>
-  </div>
-</div>
+{% include 'modals/login_modal.html' %}
 
 <!--  end login modal -->
 
+<!-- logout modal -->
+
+{% include 'modals/logout_modals.html' %}
+
+<!-- end of logout modal -->
+
   <!-- active script section -->
     <script src="{% static 'basestatic/js/jquery_min.js' %}"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
+  
     <script src="{% static 'basestatic/js/bootstrap_bundel_min.js'%}"></script>
     <script src="{% static 'basestatic/js/sweetalert_min.js' %}">
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
@@ -172,14 +129,14 @@
     </script>
     <!-- signup script-->
     <script>
-  $(document).ready(function() {
+    $(document).ready(function() {
     // Handle form submission
     $('#form1').submit(function(event) {
       event.preventDefault(); // Prevent the default form submission behavior
 
       // Get the form data
       var formData = new FormData($(this)[0]);
-
+      formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
       // Send the AJAX request
       $.ajax({
         type: 'POST',
@@ -227,7 +184,9 @@
       });
     });
   });
-</script>
+  </script>
+
+    <!-- signup script ends --> 
 <!--login script-->
 <script>
 $(document).ready(function() {
@@ -237,7 +196,8 @@ $(document).ready(function() {
 
     // Get the form data
     var formData = new FormData($(this)[0]);
-
+    formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+ 
     // Send the AJAX request
     $.ajax({
       type: 'POST',
@@ -289,6 +249,66 @@ $(document).ready(function() {
 });
 
 </script>
-<!--end of login-->
+
+<!-- logout-->
+<script>
+
+$(document).ready(function() {
+  // Handle logout button click
+  $('#logoutModal').click(function() {
+    // Get the CSRF token
+    var csrftoken = Cookies.get('csrftoken'); // Replace with your actual token cookie name
+    console.log(csrftoken);
+
+    // Send AJAX request to the logout URL
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'account:logout' %}",  // Replace with your Django logout URL
+      headers: {
+        "X-CSRFToken": "{{ csrf_token }}",  // Include the CSRF token in the request header
+      },
+      success: function(response) {
+        // Show SweetAlert success message
+        swal({
+          title: "Logged Out",
+          text: response.detail,
+          icon: "success",
+          buttons: {
+            confirm: {
+              text: "OK",
+              value: true,
+              visible: true,
+              className: "swal-button",
+            },
+          },
+        }).then(function() {
+          // Redirect to the index page
+          window.location.href = "{% url 'app:indexpage' %}";  // Replace with your index URL
+        });
+      },
+      error: function(xhr, status, error) {
+        // Show SweetAlert error message
+        swal({
+          title: "Logout Failed",
+          text: "An error occurred while logging out.",
+          icon: "error",
+          buttons: {
+            confirm: {
+              text: "OK",
+              value: true,
+              visible: true,
+              className: "swal-button",
+            },
+          },
+        });
+      }
+    });
+  });
+});
+</script>
+
+
+<!-- end of logout modal-->
+
   </body>
  </html>
