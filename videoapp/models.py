@@ -17,7 +17,7 @@ def video_upload_location(instance, filename):
     video_description = random_gen()
     random_video_name = get_random_string(22)
     video_name = filename.lower().replace(" ", random_video_name)
-    return os.path.join("new_video_files", video_description, video_name)
+    return os.path.join(str(uuid.uuid4()), video_description, video_name)
 
 
 def video_thumbnail_upload_location(instance, filename):
@@ -25,7 +25,7 @@ def video_thumbnail_upload_location(instance, filename):
     image_file_area = rand_chars
     random_image_name = get_random_string(25)
     image_name = filename.lower().replace("-", random_image_name)
-    return os.path.join("video_thumbnails", image_file_area, image_name)
+    return os.path.join(str(uuid.uuid4()), image_file_area, image_name)
 
 
 def random_string_generator(size=30, chars=string.ascii_lowercase + string.digits):
@@ -47,7 +47,8 @@ class VideoFileDetails(models.Model):
 
 
 class VideoUpload(models.Model):
-    details = models.ForeignKey(VideoFileDetails, default=None, on_delete=models.CASCADE)
+    video_title = models.CharField(max_length=255,default=None,blank=True,null=True)
+    video_description = models.TextField(max_length=600,default=None,blank=True,null=True)
     video_thumbnail = models.ImageField(upload_to=video_thumbnail_upload_location, null=True, blank=True, default=None)
     slug = models.SlugField(max_length=1000, unique=True, blank=True)
     file = models.FileField(upload_to=video_upload_location, null=True, blank=True)
