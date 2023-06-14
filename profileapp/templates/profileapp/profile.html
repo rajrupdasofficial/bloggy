@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+ <div class="profile-card">
+    <div class="profile-image">
+      <img src="{% static 'images/profile.jpg' %}" alt="Profile Image">
+      <button class="edit-button">Edit</button>
+    </div>
+    <div class="profile-details">
+      <h1 class="username">John Doe</h1>
+      <div class="profile-field">
+        <span class="field-label">Email:</span>
+        <span class="field-value">johndoe@example.com</span>
+        <button class="edit-button">Edit</button>
+      </div>
+      <div class="profile-field">
+        <span class="field-label">Password:</span>
+        <span class="field-value">********</span>
+        <button class="edit-button">Change Password</button>
+      </div>
+      <div class="profile-field">
+        <span class="field-label">Bio:</span>
+        <textarea class="bio-field">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed aliquet placerat eros, at lacinia enim fringilla eu. Pellentesque nec urna velit.</textarea>
+        <button class="edit-button">Edit</button>
+      </div>
+      <div class="profile-field">
+        <span class="field-label">Subscriptions:</span>
+        <span class="field-value">5</span>
+      </div>
+      <div class="profile-field">
+        <span class="field-label">Uploaded Videos:</span>
+        <span class="field-value">10</span>
+      </div>
+      <div class="profile-field">
+        <span class="field-label">Liked Videos:</span>
+        <span class="field-value">20</span>
+      </div>
+    </div>
+  </div>
+{% endblock %}
