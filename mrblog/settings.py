@@ -46,8 +46,10 @@ INSTALLED_APPS = [
     'searchapp.apps.SearchappConfig',
     'videoapp.apps.VideoappConfig'
 ]
+
 if PRODUCTION:
     MIDDLEWARE = [
+        'corsheaders.middleware.CorsMiddleware',
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.cache.UpdateCacheMiddleware',
@@ -63,6 +65,7 @@ if PRODUCTION:
     CACHE_MIDDLEWARE_KEY_PREFIX = "default"
 else:
     MIDDLEWARE = [
+        'corsheaders.middleware.CorsMiddleware',
         'django.middleware.security.SecurityMiddleware',
         'django.contrib.sessions.middleware.SessionMiddleware',
         'django.middleware.common.CommonMiddleware',
@@ -77,7 +80,7 @@ ROOT_URLCONF = 'mrblog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "templates")],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -207,7 +210,9 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
-
+REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (
+            "rest_framework.renderers.JSONRenderer",
+)
 """Simple JWT related settings"""
 
 SIMPLE_JWT = {
@@ -244,13 +249,18 @@ SIMPLE_JWT = {
 }
 """ CORS origin settings"""
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",
     "http://127.0.0.1:3000",
-    "http://127.0.0.1:8000",
-    "http://localhost:8000"
+    "http://localhost:3000"
+
 ]
+CORS_ALLOWED_METHODS = [
+    'GET',
+    'POST',
+]
+CORS_ORIGIN_ALLOW_ALL = False
 
 PASSWORD_RESET_TIME_OUT = 900  # in seconds
+
 #email config
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-mail.outlook.com'
