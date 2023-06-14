@@ -94,6 +94,7 @@
 
 {% include 'modals/signup_modal.html' %}
 
+
 <!-- end of signup modal -->
 
 
@@ -112,13 +113,13 @@
   <!-- active script section -->
     <script src="{% static 'basestatic/js/jquery_min.js' %}"></script>
     <script src="{% static 'basestatic/js/js_cookie_min.js' %}"></script>
-  
     <script src="{% static 'basestatic/js/bootstrap_bundel_min.js'%}"></script>
     <script src="{% static 'basestatic/js/sweetalert_min.js' %}">
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     <script src="{% static 'gallery/js/indx_ldng_anmtn.js' %}"></script>
     <script src="{% static 'basestatic/js/modal_controller.js' %}"></script>
     <script src=" https://cdn.jsdelivr.net/npm/alpinejs@3.12.2/dist/cdn.min.js "></script>
+
 
     <script>
      function openModal() {
@@ -140,6 +141,7 @@
       // Get the form data
       var formData = new FormData($(this)[0]);
       formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
       // Send the AJAX request
       $.ajax({
         type: 'POST',
@@ -190,6 +192,7 @@
   </script>
 
     <!-- signup script ends --> 
+
 <!--login script-->
 <script>
 $(document).ready(function() {
@@ -200,7 +203,6 @@ $(document).ready(function() {
     // Get the form data
     var formData = new FormData($(this)[0]);
     formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
- 
     // Send the AJAX request
     $.ajax({
       type: 'POST',
@@ -310,5 +312,6 @@ $(document).ready(function() {
 });
 </script>
 <!-- end of logout modal-->
+
   </body>
  </html>

@@ -35,6 +35,7 @@ function openLModal() {
   });
   backdrop.show();
 }
+
 //open logout modal
 function openLogoutModal() {
   var loginModal = document.getElementById('exampleModal');
@@ -60,4 +61,3 @@ function openLogoutModal() {
   });
   backdrop.show();
 }
-

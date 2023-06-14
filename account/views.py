@@ -62,6 +62,7 @@ def get_tokens_for_user(user):
 
     return {'refresh': str(refresh), 'access': str(refresh.access_token)}
 
+
 # Decorators for security measures
 csrf_protect_m = method_decorator(csrf_protect)
 never_cache_m = method_decorator(never_cache)
@@ -107,7 +108,6 @@ def is_password_strong(password):
     # Example implementation:
     return len(password) >= 8
 
-
 # user login section
 class Login(APIView):
     renderer_classes = [UserRenderer]
@@ -119,6 +119,7 @@ class Login(APIView):
         if serializer.is_valid(raise_exception=True):
             email = serializer.data.get('email')
             password = serializer.data.get('password')
+
             user = authenticate(email=email, password=password)
             if user is not None:
                 login(request, user)  # Logs the user in and creates a session
@@ -136,6 +137,7 @@ class Login(APIView):
             print('Serializer validation failed:', serializer.errors)
             return Response({'errors': serializer.errors}, status=400)
 
+
 #logout method
 class Logout(APIView):
     @csrf_protect_m
@@ -146,3 +148,4 @@ class Logout(APIView):
         rotate_token(request) 
         response.delete_cookie('refresh_token')
         return response
+
