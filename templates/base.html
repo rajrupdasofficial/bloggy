@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="{% static 'gallery/css/burger.css' %}">
     <link rel="stylesheet" href="{% static 'gallery/css/indx_ldng_anmtn.css' %}">
      <link rel="stylesheet" href="{% static 'gallery/css/video.css' %}">
+     <link rel="stylesheet" href="{% static 'profileapp/css/profile.css' %}">
     <title>{% block title %}  {% endblock %}</title>
     <style>
        body {
@@ -117,6 +118,8 @@
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
     <script src="{% static 'gallery/js/indx_ldng_anmtn.js' %}"></script>
     <script src="{% static 'basestatic/js/modal_controller.js' %}"></script>
+    <script src=" https://cdn.jsdelivr.net/npm/alpinejs@3.12.2/dist/cdn.min.js "></script>
+
     <script>
      function openModal() {
     var modal = document.getElementById('staticBackdrop');
@@ -306,9 +309,6 @@ $(document).ready(function() {
   });
 });
 </script>
-
-
 <!-- end of logout modal-->
-
   </body>
  </html>
