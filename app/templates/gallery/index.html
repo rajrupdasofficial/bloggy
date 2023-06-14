@@ -5,7 +5,7 @@
 {% block content %}
     <div class="wrapper">
         {% for i in all_videos %}
-        <a href="{% url 'videos' i.slug %}">
+        <a href="{% url 'app:videos' i.slug %}">
           <div class="card">
             <img class="card-img-top" src="{{ i.video_thumbnail.url }}" alt="{{ i.details.name }}">
             <div class="card-body">
