@@ -59,6 +59,7 @@ if PRODUCTION:
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'analyticsapp.middlewares.TrackIPAddressMiddleware'
     ]
     CACHE_MIDDLEWARE_ALIAS = "default"
     CACHE_MIDDLEWARE_SECONDS = 600
@@ -73,6 +74,8 @@ else:
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'analyticsapp.middlewares.TrackIPAddressMiddleware'
+
     ]
 
 ROOT_URLCONF = 'mrblog.urls'
@@ -266,6 +269,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_USER = config('EMAIL')
-EMAIL_PASSWORD = config('PASSWORD')
-EMAIL_FROM = config('EMAIL')
+#EMAIL_USER = config('EMAIL')
+#EMAIL_PASSWORD = config('PASSWORD')
+#EMAIL_FROM = config('EMAIL')
