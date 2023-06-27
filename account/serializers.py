@@ -9,6 +9,7 @@ from .utils import Util
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.contrib.auth import authenticate, login
+import re
 
 class UserRSerializer(serializers.HyperlinkedModelSerializer):
     password2 = serializers.CharField(style={'input_type': 'password'}, write_only=True)
@@ -37,6 +38,22 @@ class UserRSerializer(serializers.HyperlinkedModelSerializer):
             validate_email(value)
         except ValidationError:
             raise serializers.ValidationError("Invalid email format")
+
+        return value
+    
+    def  validate_password(self, value):
+    # Minimum length check
+        if len(value) < 8:
+            raise serializers.ValidationError("Password must be at least 8 characters long")
+
+    # Character complexity check
+        if not re.search(r'[A-Z]', value) or not re.search(r'[a-z]', value) or not re.search(r'\d', value) or not re.search(r'[!@#$%^&*]', value):
+            raise serializers.ValidationError("Password must include at least one uppercase letter, one lowercase letter, one digit, and one special character")
+
+    # Commonly used passwords check
+        weak_passwords = ['password', '123456', 'qwerty', ...]  # List of weak passwords
+        if value in weak_passwords:
+            raise serializers.ValidationError("Password is too weak. Please choose a stronger password")
 
         return value
 
