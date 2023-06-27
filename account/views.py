@@ -84,8 +84,10 @@ class Registration(APIView):
 
             # Set the refresh token as an HTTP-only cookie
             response.set_cookie('refresh_token', refresh_token, httponly=True, samesite='None', secure=True)
-
             return response
+        elif reg_serializer.errors:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         else:
             # Check if username or email already exists in the errors
             if 'username' in reg_serializer.errors and 'email' in reg_serializer.errors:
@@ -99,13 +101,6 @@ class Registration(APIView):
 
             return Response({'msg': error_message}, status=status.HTTP_400_BAD_REQUEST)
 
-
-def is_password_strong(password):
-    # Implement your own password strength validation logic here
-    # Return True if the password is strong enough, False otherwise
-    # You can include requirements such as minimum length, character complexity, etc.
-    # Example implementation:
-    return len(password) >= 8
 
 
 # user login section
