@@ -10,7 +10,7 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt, ensure_csrf_cookie
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from rest_framework.response import Response
@@ -18,11 +18,12 @@ from django.http import JsonResponse
 from django.contrib.auth import authenticate, login,logout
 from rest_framework import status
 from django.middleware.csrf import get_token
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
 from django.contrib.sessions.backends.db import SessionStore
 from django.middleware.csrf import rotate_token
 from rest_framework.authtoken.models import Token
+from rest_framework import permissions
+
 
 def set_refresh_token_to_session(session_key: str, refresh_token: str):
     try:
@@ -64,13 +65,15 @@ def get_tokens_for_user(user):
 
 # Decorators for security measures
 csrf_protect_m = method_decorator(csrf_protect)
+csrf_ensure_m =  method_decorator(ensure_csrf_cookie)
 never_cache_m = method_decorator(never_cache)
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
 #user registration 
 class Registration(APIView):
     renderer_classes = [UserRenderer]
-    
-    @csrf_protect_m
+    permission_classes = (permissions.AllowAny, )
+
+    @csrf_ensure_m
     @never_cache_m
     def post(self, request, format=None):
         reg_serializer = UserRSerializer(data=request.data)
@@ -107,7 +110,7 @@ class Registration(APIView):
 class Login(APIView):
     renderer_classes = [UserRenderer]
     
-    @csrf_protect_m
+    @csrf_ensure_m
     @never_cache_m
     def post(self, request, format=None):
         serializer = UserLSerializer(data=request.data)
@@ -133,7 +136,8 @@ class Login(APIView):
 
 #logout method
 class Logout(APIView):
-    @csrf_protect_m
+
+    @csrf_ensure_m
     @never_cache_m
     def post(self, request, format=None):
         logout(request)
