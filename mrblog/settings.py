@@ -17,7 +17,20 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = True if config('DEBUG') == "True" else False
 PRODUCTION = True if config('PRODUCTION') == "True" else False
 
-ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://localhost:8000',
+]
+
+
+ALLOWED_HOSTS = ['localhost']
+
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://localhost:8000'
+]
+
 
 AUTH_USER_MODEL = 'account.User'
 
@@ -30,6 +43,7 @@ INSTALLED_APPS = [
     'apiapp.apps.ApiappConfig',
     'ckeditor',
     'ckeditor_uploader',
+    'corsheaders',
     'customadmin.apps.CustomadminConfig',
     'commentapp.apps.CommentappConfig',
     'contactapp.apps.ContactappConfig',
@@ -251,15 +265,13 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_SAMESITE': 'None',
 }
 """ CORS origin settings"""
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:3000",
-    "http://localhost:3000"
 
-]
 CORS_ALLOWED_METHODS = [
     'GET',
     'POST',
 ]
+
+
 CORS_ORIGIN_ALLOW_ALL = False
 
 PASSWORD_RESET_TIME_OUT = 900  # in seconds
