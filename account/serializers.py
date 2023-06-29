@@ -79,11 +79,8 @@ class PasChSerializer(serializers.Serializer):
         fields = ['password','password2']
     def validate(self, attrs):
         password = attrs.get('password')
-        print(password)
         password2 = attrs.get('password2')
-        print(password2)
         user = self.context.get('user')
-        print(user)
         if password!=password2:
             raise serializers.ValidationError('Passwords wont match')
         user.set_password(password)
@@ -100,11 +97,8 @@ class SPS(serializers.Serializer):
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email=email)
             uid = urlsafe_base64_encode(force_bytes(user.id))
-            print('Encoded uid',uid)
             token = PasswordResetTokenGenerator().make_token(user)
-            print("reset token",token)
             link = 'http://localhost:8000/api/user/reset/'+uid+'/'+token
-            print('link',link)
             # send email
             body = 'Click the link to proceed'+link
             data = {
