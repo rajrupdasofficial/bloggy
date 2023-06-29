@@ -25,6 +25,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import permissions
 
 
+
 def set_refresh_token_to_session(session_key: str, refresh_token: str):
     try:
         session = Session.objects.get(session_key=session_key)
