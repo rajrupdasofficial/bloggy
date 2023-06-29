@@ -16,6 +16,8 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if config('DEBUG') == "True" else False
 PRODUCTION = True if config('PRODUCTION') == "True" else False
+IS_REDIS = True if config('IS_REDIS') == "True" else False
+IS_MEMCACHED = True if config('IS_MEMCACHED') == "True" else False
 
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3000',
@@ -124,9 +126,11 @@ if PRODUCTION:
             'USER': config('DB_USER'),
             'PASSWORD': config('SUPABASE_PASSWORD'),
             'PORT': config('PORT'),
-            'CERT': 'prod-ca-2021.crt'
-        }
+            'OPTIONS': {
+                'sslmode': 'require',
+        },
     }
+}
 else:
     DATABASES = {
         'default': {
@@ -135,7 +139,7 @@ else:
         }
     }
 
-if PRODUCTION:
+if PRODUCTION and IS_REDIS:
     CACHE_TTL = 50 * 15
     CACHES = {
         "default": {
@@ -148,6 +152,16 @@ if PRODUCTION:
                 'pool_class': config('POOL_CLASS'),
                 "CLIENT_CLASS": config('CLIENT_CLASS'),
             }
+        }
+    }
+    SESSION_ENGINE = config("SESSION_ENGINE")
+    SESSION_CACHE_ALIAS = config("SESSION_CACHE_ALIAS")
+elif IS_MEMCACHED:
+    CACHE_TTL = 3600
+    CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211',
         }
     }
     SESSION_ENGINE = config("SESSION_ENGINE")
