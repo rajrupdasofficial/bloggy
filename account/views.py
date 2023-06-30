@@ -113,7 +113,7 @@ class Login(APIView):
     
     @csrf_ensure_m
     @never_cache_m
-    def post(self, request, format=None):
+    def post(self, request,format=None):
         serializer = UserLSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             email = serializer.data.get('email')
@@ -124,8 +124,11 @@ class Login(APIView):
                 # Generate the token
                 token = get_tokens_for_user(user)
                 # Set the token as an HTTP-only session cookie
-                response = Response({'token': token, 'msg': 'Success Login'})
-                response.set_cookie('refresh_token', token['refresh'], httponly=True, samesite='Strict')
+                csrf_token = get_token(request)
+                session_id = request.session.session_key
+                response = Response({'token': token, '_intercom_csrf_token': csrf_token, '_intercom_session_id': session_id , 'msg': 'Success Login'})
+                #response.set_cookie('refresh_token', token['refresh'], httponly=True, samesite='Strict')
+               
                 return response
             else:
                 print('User authentication failed:', email,password)
