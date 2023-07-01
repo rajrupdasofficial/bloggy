@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'fileapp.apps.FileappConfig',
     'profileapp.apps.ProfileappConfig',
     'rest_framework',
+    'rest_framework_api_key',
     'searchapp.apps.SearchappConfig',
     'videoapp.apps.VideoappConfig'
 ]
@@ -128,9 +129,9 @@ if PRODUCTION:
             'PORT': config('PORT'),
             'OPTIONS': {
                 'sslmode': 'require',
-        },
+            },
+        }
     }
-}
 else:
     DATABASES = {
         'default': {
@@ -159,9 +160,9 @@ if PRODUCTION and IS_REDIS:
 elif IS_MEMCACHED:
     CACHE_TTL = 3600
     CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': '127.0.0.1:11211',
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+            'LOCATION': '127.0.0.1:11211',
         }
     }
     SESSION_ENGINE = config("SESSION_ENGINE")
@@ -239,10 +240,14 @@ MESSAGE_TAGS = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework_api_key.permissions.HasAPIKey',
+    ),
 }
+
 REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (
-            "rest_framework.renderers.JSONRenderer",
+    "rest_framework.renderers.JSONRenderer",
 )
 """Simple JWT related settings"""
 
@@ -250,7 +255,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
     'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION':False,
+    'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS512',
@@ -290,11 +295,11 @@ CORS_ORIGIN_ALLOW_ALL = False
 
 PASSWORD_RESET_TIME_OUT = 900  # in seconds
 
-#email config
+# email config
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-#EMAIL_USER = config('EMAIL')
-#EMAIL_PASSWORD = config('PASSWORD')
-#EMAIL_FROM = config('EMAIL')
+# EMAIL_USER = config('EMAIL')
+# EMAIL_PASSWORD = config('PASSWORD')
+# EMAIL_FROM = config('EMAIL')

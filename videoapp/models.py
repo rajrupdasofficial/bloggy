@@ -1,5 +1,4 @@
 from django.db import models
-from django.db import models
 import uuid
 import os
 from django.template.defaultfilters import slugify
@@ -47,8 +46,8 @@ class VideoFileDetails(models.Model):
 
 
 class VideoUpload(models.Model):
-    video_title = models.CharField(max_length=255,default=None,blank=True,null=True)
-    video_description = models.TextField(max_length=600,default=None,blank=True,null=True)
+    video_title = models.CharField(max_length=255, default=None, blank=True, null=True)
+    video_description = models.TextField(max_length=600, default=None, blank=True, null=True)
     video_thumbnail = models.ImageField(upload_to=video_thumbnail_upload_location, null=True, blank=True, default=None)
     slug = models.SlugField(max_length=1000, unique=True, blank=True)
     file = models.FileField(upload_to=video_upload_location, null=True, blank=True)

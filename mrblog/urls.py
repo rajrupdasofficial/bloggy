@@ -19,13 +19,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from decouple import config
 urlpatterns = [
-    path("app/", include('app.urls',namespace='app')),
-    path('users/',include("account.urls",namespace='account')),
+    path("app/", include('app.urls', namespace='app')),
+    path('users/', include("account.urls", namespace='account')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('custom/users/', include('customadmin.urls')),
     path('customadmin/', include('django.contrib.auth.urls')),
-    path('userprofile/',include('profileapp.urls',namespace="profile")),
-    path('',include('videoapp.urls',namespace="video")),
+    path('userprofile/', include('profileapp.urls', namespace="profile")),
+    path('', include('videoapp.urls', namespace="video")),
     path(config('admin'), admin.site.urls),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

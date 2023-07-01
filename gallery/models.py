@@ -1,15 +1,12 @@
 from django.db import models
 import uuid
 import os
-from django.template.defaultfilters import slugify
-import random
-import string
-from django.utils.crypto import get_random_string
+# from django.template.defaultfilters import slugify
+# import random
+# import string
+# from django.utils.crypto import get_random_string
 
 # Create your models here.
-
-
-
 
 
 def photo_upload_location(instance, image_name):

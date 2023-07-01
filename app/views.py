@@ -2,10 +2,10 @@ from django.shortcuts import render, get_object_or_404
 from .models import Blog
 from commentapp.models import Comment
 from contactapp.models import Contact
-from analyticsapp.models import  Analytics
+from analyticsapp.models import Analytics
 from django.core.paginator import Paginator
 from gallery.models import Photo
-from videoapp.models import  VideoUpload,VideoFileDetails
+from videoapp.models import VideoUpload
 from django.contrib import messages
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT

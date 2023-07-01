@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import VideoUpload
@@ -13,8 +12,10 @@ from django.conf import settings
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
+
 class IndexAPIView(APIView):
     permission_classes = (permissions.AllowAny, )
+
     @method_decorator(cache_page(CACHE_TTL))
     def get(self, request):
         all_videos = VideoUpload.objects.all().order_by('-created')
@@ -23,4 +24,3 @@ class IndexAPIView(APIView):
 
     def post(self, request):
         return Response({'error': 'Something went wrong. Please try again.'}, status=400)
-
