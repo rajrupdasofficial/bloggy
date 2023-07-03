@@ -5,5 +5,5 @@ from .models import VideoUpload
 
 @admin.register(VideoUpload)
 class VideoUploadAdmin(admin.ModelAdmin):
-    exclude = ["slug",]
+    exclude = ["slug","vid"]
     list_per_page = 30
