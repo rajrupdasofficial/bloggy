@@ -32,10 +32,10 @@ class VideoDetailView(APIView):
     permission_classes = [HasAPIKey]
 
     @method_decorator(cache_page(CACHE_TTL))
-    def get(request,vid):
+    def post(request,vid):
         video_slug = get_object_or_404(VideoUpload, vid=vid)
         serializer = VideoPlayerSerializer(video_slug, many=True)
         return Response(serializer.data)
     
-    def post(self, request):
+    def get(self, request):
         return Response({'error': 'Something went wrong. Please Try again'}, status=400)
