@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class UserProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     email = serializers.EmailField(source='user.email')

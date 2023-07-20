@@ -11,6 +11,7 @@ import os
 from django.conf import settings
 import uuid
 
+
 def random_string_generator(size=100, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
 
@@ -44,7 +45,7 @@ class Blog(models.Model):
             self.thumbnail = InMemoryUploadedFile(output, 'ImageField', "%s.webp" % self.thumbnail.name.join(
                 random_string_generator()).split('.')[0:10], 'thumbnail/webp', len(output.getbuffer()), None)
         ud = str(uuid.uuid4())
-        original_slug = slugify(self.title+'-'+ud)
+        original_slug = slugify(self.title + '-' + ud)
         queryset = Blog.objects.all().filter(slug__iexact=original_slug).count()
         count = 1
         slug = original_slug

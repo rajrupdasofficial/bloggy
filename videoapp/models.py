@@ -1,5 +1,4 @@
 from django.db import models
-from django.db import models
 import uuid
 import os
 from django.template.defaultfilters import slugify
@@ -45,10 +44,14 @@ class VideoFileDetails(models.Model):
         verbose_name = 'Video File Detail'
         verbose_name_plural = 'Video file Details'
 
+def generate_video_id(length=50):
+    characters = string.ascii_letters + string.digits + '-_'
+    return ''.join(random.choice(characters) for _ in range(length))
 
 class VideoUpload(models.Model):
-    video_title = models.CharField(max_length=255,default=None,blank=True,null=True)
-    video_description = models.TextField(max_length=600,default=None,blank=True,null=True)
+    vid = models.CharField(max_length=1000, default=generate_video_id, blank=True,null=True )
+    video_title = models.CharField(max_length=255, default=None, blank=True, null=True)
+    video_description = models.TextField(max_length=600, default=None, blank=True, null=True)
     video_thumbnail = models.ImageField(upload_to=video_thumbnail_upload_location, null=True, blank=True, default=None)
     slug = models.SlugField(max_length=1000, unique=True, blank=True)
     file = models.FileField(upload_to=video_upload_location, null=True, blank=True)

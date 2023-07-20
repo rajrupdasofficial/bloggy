@@ -1,17 +1,19 @@
 from django.db import models
-import uuid
+# import uuid
 import os
-from django.template.defaultfilters import slugify
-import random
-import string
-from django.utils.crypto import get_random_string
+# from django.template.defaultfilters import slugify
+# import random
+# import string
+# from django.utils.crypto import get_random_string
 
 # Create your models here.
+
 
 def file_upload_location(instance, filename):
     file_description = instance.details.name.lower().replace(" ", "-")
     file_name = filename.lower().replace(" ", "-")
     return os.path.join("New_files", file_description, file_name)
+
 
 class FileDetail(models.Model):
     name = models.CharField(max_length=255, default=None)

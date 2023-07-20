@@ -16,8 +16,23 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if config('DEBUG') == "True" else False
 PRODUCTION = True if config('PRODUCTION') == "True" else False
+IS_REDIS = True if config('IS_REDIS') == "True" else False
+IS_MEMCACHED = True if config('IS_MEMCACHED') == "True" else False
 
-ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://localhost:8000',
+]
+
+
+ALLOWED_HOSTS = ['localhost']
+
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://localhost:8000'
+]
+
 
 AUTH_USER_MODEL = 'account.User'
 
@@ -30,6 +45,7 @@ INSTALLED_APPS = [
     'apiapp.apps.ApiappConfig',
     'ckeditor',
     'ckeditor_uploader',
+    'corsheaders',
     'customadmin.apps.CustomadminConfig',
     'commentapp.apps.CommentappConfig',
     'contactapp.apps.ContactappConfig',
@@ -43,6 +59,7 @@ INSTALLED_APPS = [
     'fileapp.apps.FileappConfig',
     'profileapp.apps.ProfileappConfig',
     'rest_framework',
+    'rest_framework_api_key',
     'searchapp.apps.SearchappConfig',
     'videoapp.apps.VideoappConfig'
 ]
@@ -59,6 +76,7 @@ if PRODUCTION:
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'analyticsapp.middlewares.TrackIPAddressMiddleware'
     ]
     CACHE_MIDDLEWARE_ALIAS = "default"
     CACHE_MIDDLEWARE_SECONDS = 600
@@ -73,6 +91,8 @@ else:
         'django.contrib.auth.middleware.AuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
+        'analyticsapp.middlewares.TrackIPAddressMiddleware'
+
     ]
 
 ROOT_URLCONF = 'mrblog.urls'
@@ -107,7 +127,9 @@ if PRODUCTION:
             'USER': config('DB_USER'),
             'PASSWORD': config('SUPABASE_PASSWORD'),
             'PORT': config('PORT'),
-            'CERT': 'prod-ca-2021.crt'
+            'OPTIONS': {
+                'sslmode': 'require',
+            },
         }
     }
 else:
@@ -118,7 +140,7 @@ else:
         }
     }
 
-if PRODUCTION:
+if PRODUCTION and IS_REDIS:
     CACHE_TTL = 50 * 15
     CACHES = {
         "default": {
@@ -131,6 +153,16 @@ if PRODUCTION:
                 'pool_class': config('POOL_CLASS'),
                 "CLIENT_CLASS": config('CLIENT_CLASS'),
             }
+        }
+    }
+    SESSION_ENGINE = config("SESSION_ENGINE")
+    SESSION_CACHE_ALIAS = config("SESSION_CACHE_ALIAS")
+elif IS_MEMCACHED:
+    CACHE_TTL = 3600
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+            'LOCATION': '127.0.0.1:11211',
         }
     }
     SESSION_ENGINE = config("SESSION_ENGINE")
@@ -208,10 +240,14 @@ MESSAGE_TAGS = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework_api_key.permissions.HasAPIKey',
+    ),
 }
+
 REST_FRAMEWORK["DEFAULT_RENDERER_CLASSES"] = (
-            "rest_framework.renderers.JSONRenderer",
+    "rest_framework.renderers.JSONRenderer",
 )
 """Simple JWT related settings"""
 
@@ -219,7 +255,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
     'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION':False,
+    'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS512',
@@ -248,24 +284,22 @@ SIMPLE_JWT = {
     'AUTH_TOKEN_SAMESITE': 'None',
 }
 """ CORS origin settings"""
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:3000",
-    "http://localhost:3000"
 
-]
 CORS_ALLOWED_METHODS = [
     'GET',
     'POST',
 ]
+
+
 CORS_ORIGIN_ALLOW_ALL = False
 
 PASSWORD_RESET_TIME_OUT = 900  # in seconds
 
-#email config
+# email config
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp-mail.outlook.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_USER = config('EMAIL')
-EMAIL_PASSWORD = config('PASSWORD')
-EMAIL_FROM = config('EMAIL')
+# EMAIL_USER = config('EMAIL')
+# EMAIL_PASSWORD = config('PASSWORD')
+# EMAIL_FROM = config('EMAIL')

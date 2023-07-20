@@ -1,6 +1,8 @@
 from django.contrib import admin
 from .models import FileDetail, FileUpload
 # Register your models here.
+
+
 class FileAdmin(admin.StackedInline):
     model = FileUpload
 

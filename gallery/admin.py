@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import (Photo, PhotoDetails)
 
+
 class PhotoAdmin(admin.StackedInline):
     model = Photo
 

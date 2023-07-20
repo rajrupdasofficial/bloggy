@@ -1,28 +1,22 @@
 from rest_framework.views import APIView
-from .serializers import UserRSerializer, UserLSerializer, ProfileSerializer,PasChSerializer,SPS, UPRS
-from django.contrib.auth import authenticate
+from .serializers import UserRSerializer, UserLSerializer
 from .renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
-from django.http import HttpResponse
-from rest_framework import status
-from django.contrib.auth.hashers import make_password, check_password
-from django.core.exceptions import ValidationError
-from django.core.validators import validate_email
 from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
 from django.views.decorators.cache import never_cache
 from django.views.decorators.debug import sensitive_post_parameters
 from rest_framework.response import Response
-from django.http import JsonResponse
-from django.contrib.auth import authenticate, login,logout
+from django.contrib.auth import authenticate, login, logout
 from rest_framework import status
 from django.middleware.csrf import get_token
-from django.views.decorators.csrf import csrf_exempt
 from django.contrib.sessions.models import Session
 from django.contrib.sessions.backends.db import SessionStore
 from django.middleware.csrf import rotate_token
-from rest_framework.authtoken.models import Token
+# from rest_framework.authtoken.models import Token
+# from rest_framework import permissions
+from rest_framework_api_key.permissions import HasAPIKey
+
 
 def set_refresh_token_to_session(session_key: str, refresh_token: str):
     try:
@@ -32,14 +26,14 @@ def set_refresh_token_to_session(session_key: str, refresh_token: str):
         session.session_data = SessionStore().encode(session_data)
         session.save()
     except Session.DoesNotExist:
-         # Create a new session
+        # Create a new session
         session = SessionStore()
         session.create()
         session_data = {'refresh_token': refresh_token}
         session_data_encoded = session.encode(session_data)
         session.session_data = session_data_encoded
         session.save()
-        
+
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -62,15 +56,20 @@ def get_tokens_for_user(user):
 
     return {'refresh': str(refresh), 'access': str(refresh.access_token)}
 
+
 # Decorators for security measures
 csrf_protect_m = method_decorator(csrf_protect)
+csrf_ensure_m = method_decorator(ensure_csrf_cookie)
 never_cache_m = method_decorator(never_cache)
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
-#user registration 
+# user registration
+
+
 class Registration(APIView):
     renderer_classes = [UserRenderer]
-    
-    @csrf_protect_m
+    permission_classes = [HasAPIKey]
+
+    @csrf_ensure_m
     @never_cache_m
     def post(self, request, format=None):
         reg_serializer = UserRSerializer(data=request.data)
@@ -84,8 +83,10 @@ class Registration(APIView):
 
             # Set the refresh token as an HTTP-only cookie
             response.set_cookie('refresh_token', refresh_token, httponly=True, samesite='None', secure=True)
-
             return response
+        elif reg_serializer.errors:
+            return Response(reg_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         else:
             # Check if username or email already exists in the errors
             if 'username' in reg_serializer.errors and 'email' in reg_serializer.errors:
@@ -100,19 +101,13 @@ class Registration(APIView):
             return Response({'msg': error_message}, status=status.HTTP_400_BAD_REQUEST)
 
 
-def is_password_strong(password):
-    # Implement your own password strength validation logic here
-    # Return True if the password is strong enough, False otherwise
-    # You can include requirements such as minimum length, character complexity, etc.
-    # Example implementation:
-    return len(password) >= 8
-
-
 # user login section
 class Login(APIView):
+
     renderer_classes = [UserRenderer]
-    
-    @csrf_protect_m
+    permission_classes = [HasAPIKey]
+
+    @csrf_ensure_m
     @never_cache_m
     def post(self, request, format=None):
         serializer = UserLSerializer(data=request.data)
@@ -125,24 +120,31 @@ class Login(APIView):
                 # Generate the token
                 token = get_tokens_for_user(user)
                 # Set the token as an HTTP-only session cookie
-                response = Response({'token': token, 'msg': 'Success Login'})
-                response.set_cookie('refresh_token', token['refresh'], httponly=True, samesite='Strict')
+                csrf_token = get_token(request)
+                session_id = request.session.session_key
+                response = Response({'token': token, '_intercom_csrf_token': csrf_token,
+                                    '_intercom_session_id': session_id, 'msg': 'Success Login'})
+                # response.set_cookie('refresh_token', token['refresh'], httponly=True, samesite='Strict')
+
                 return response
             else:
-                print('User authentication failed:', email,password)
-                
+                print('User authentication failed:', email, password)
+
                 return Response({'errors': {'non_field_errors': ['Email or password is not valid.']}}, status=400)
         else:
             print('Serializer validation failed:', serializer.errors)
             return Response({'errors': serializer.errors}, status=400)
 
-#logout method
+# logout method
+
+
 class Logout(APIView):
-    @csrf_protect_m
+
+    @csrf_ensure_m
     @never_cache_m
     def post(self, request, format=None):
         logout(request)
         response = Response({'message': 'Logged out successfully.'})
-        rotate_token(request) 
+        rotate_token(request)
         response.delete_cookie('refresh_token')
         return response
