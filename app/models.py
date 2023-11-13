@@ -9,6 +9,8 @@ from PIL import Image as Img
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from ckeditor_uploader.fields import RichTextUploadingField
 import os
+from taggit.managers import TaggableManager
+from django.conf import settings
 
 
 class Analytics(models.Model):
@@ -30,12 +32,14 @@ class Blog(models.Model):
     def image_upload_to(self, instance=None):
         if instance:
             return os.path.join("Blog", self.title, instance)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=500, unique=True, blank=True)
     title = models.CharField(max_length=200)
     category = models.CharField(max_length=255, default=None)
     thumbnail = models.ImageField(upload_to=image_upload_to, default=None)
     content = RichTextUploadingField()
+    tags = TaggableManager(blank=True)
     featured = models.BooleanField(default=False)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
@@ -48,9 +52,9 @@ class Blog(models.Model):
             img = Img.open(BytesIO(self.thumbnail.read()))
             if img.mode != 'RGB':
                 img = img.convert('RGB')
-            img.thumbnail((self.thumbnail.width / 1.5, self.thumbnail.height / 1.5), Img.ANTIALIAS)
+            img.thumbnail((self.thumbnail.width / 1.5, self.thumbnail.height / 1.5), Img.BOX)
             output = BytesIO()
-            img.save(output, format='WebP', quality=70)
+            img.save(output, format='WebP', quality=80)
             output.seek(0)
             self.thumbnail = InMemoryUploadedFile(output, 'ImageField', "%s.webp" % self.thumbnail.name.join(
                 random_string_generator()).split('.')[0:10], 'thumbnail/webp', len(output.getbuffer()), None)
